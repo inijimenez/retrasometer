@@ -1,88 +1,26 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-} from "@mui/material";
-import axios from "axios";
-import { MuiPickersUtilsProvider, TimePicker } from "@mui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import React, { useState, useEffect } from 'react';
+import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 const App = () => {
   const [stations, setStations] = useState([]);
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
   const [trains, setTrains] = useState([]);
 
   useEffect(() => {
-    fetchStations();
+    // Cargar las estaciones de tren aquí
   }, []);
-
-  const fetchStations = async () => {
-    try {
-      const response = await axios.post(
-        "https://data.renfe.com/api/3/action/datastore_search",
-        {
-          resource_id: "daa68d9b-77cf-4024-890f-285d31184c5a",
-          q: "",
-          filters: {},
-          limit: 93,
-          offset: 0,
-        }
-      );
-      const sortedStations = response.data.result.records.sort((a, b) =>
-        a.DESCRIPCION.localeCompare(b.DESCRIPCION)
-      );
-      setStations(sortedStations);
-    } catch (error) {
-      console.error("Error fetching stations:", error);
-    }
-  };
-
-  const fetchTrains = async (e) => {
-    e.preventDefault();
-
-    if (!origin || !destination) {
-      alert("Por favor, selecciona origen y destino.");
-      return;
-    }
-
-    const today = new Date();
-    const date = today.toISOString().slice(0, 10).replaceAll("-", "");
-    const currentHour = today.getHours();
-    const previousHour = new Date(today.getTime() - 60 * 60 * 1000).getHours();
-    const nextHour = new Date(today.getTime() + 60 * 60 * 1000).getHours();
-
-    try {
-      const response = await axios.post(
-        "https://horarios.renfe.com/cer/HorariosServlet",
-        {
-          nucleo: "10",
-          origen,
-          destino,
-          fchaViaje: date,
-          validaReglaNegocio: true,
-          tiempoReal: true,
-          servicioHorarios: "VTI",
-          horaViajeOrigen: previousHour,
-          horaViajeLlegada: nextHour,
-          accesibilidadTrenes: true,
-        }
-      );
-      setTrains(response.data.horario);
-    } catch (error) {
-      console.error("Error fetching trains:", error);
-    }
-  };
 
   const handleOriginChange = (event) => {
     setOrigin(event.target.value);
@@ -92,10 +30,15 @@ const App = () => {
     setDestination(event.target.value);
   };
 
+  const fetchTrains = (event) => {
+    event.preventDefault();
+    // Obtener horarios de trenes aquí
+  };
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" align="center" gutterBottom>
-        RetrasoMeter
+        Buscador de trenes
       </Typography>
       <form onSubmit={fetchTrains}>
         <FormControl fullWidth variant="outlined" margin="normal">
@@ -131,14 +74,14 @@ const App = () => {
           variant="contained"
           color="primary"
           fullWidth
-          style={{ marginTop: "1rem" }}
+          sx={{ marginTop: '1rem' }}
         >
           Buscar trenes
         </Button>
       </form>
       {trains.length > 0 && (
         <>
-          <Typography variant="h6" align="center" style={{ marginTop: "2rem" }}>
+          <Typography variant="h6" align="center" sx={{ marginTop: '2rem' }}>
             Horarios de trenes
           </Typography>
           <Table size="small">
@@ -155,8 +98,8 @@ const App = () => {
                 <TableRow key={index}>
                   <TableCell>{origin}</TableCell>
                   <TableCell>{destination}</TableCell>
-                  <TableCell>{train.horaSalida}</TableCell>
-                  <TableCell>{train.horaLlegada}</TableCell>
+                  <TableCell>{train.departureTime}</TableCell>
+                  <TableCell>{train.arrivalTime}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
