@@ -3,6 +3,12 @@ import axios from 'axios';
 const API_BASE_URL = 'https://data.renfe.com/api/3/action/datastore_search';
 const HORARIOS_BASE_URL = 'https://horarios.renfe.com/cer/HorariosServlet';
 
+const headers = {
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0",
+  "Content-Type": "application/json",
+};
+
 export async function getStations() {
   try {
     const response = await axios.post(API_BASE_URL, {
@@ -11,12 +17,14 @@ export async function getStations() {
       filters: {},
       limit: 93,
       offset: 0,
-    });
+    },
+    { headers });
 
     return response.data.result.records;
   } catch (error) {
     console.error('Error fetching stations:', error);
-    return [];
+    throw error;
+    //return [];
   }
 }
 
@@ -37,11 +45,13 @@ export async function getTrains(origen, destino) {
       horaViajeOrigen: horaAnterior,
       horaViajeLlegada: horaSiguiente,
       accesibilidadTrenes: true,
-    });
+    },
+    { headers });
 
     return response.data.horario;
   } catch (error) {
     console.error('Error fetching trains:', error);
-    return [];
+    throw error;
+    //return [];
   }
 }
