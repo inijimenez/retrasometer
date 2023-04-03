@@ -1,11 +1,36 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from '@mui/material';
 
-const TrainList = ({ trenes }) => {
+const TrainList = ({ trains }) => {
   return (
-    <TableContainer component={Paper}>
-      {/* Table elements */}
-    </TableContainer>
+    <Container maxWidth="sm">
+      <Box my={4}>
+        <Typography variant="h5" component="h2" align="center" gutterBottom>
+          Trenes encontrados
+        </Typography>
+        <List>
+          {trains.map((train, index) => (
+            <React.Fragment key={train.trainId}>
+              <ListItem>
+                <ListItemText
+                  primary={`${train.origin} - ${train.destination}`}
+                  secondary={`Retraso: ${train.delay} minutos`}
+                />
+              </ListItem>
+              {index < trains.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      </Box>
+    </Container>
   );
 };
 
