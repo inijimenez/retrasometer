@@ -22,7 +22,7 @@ export async function getStations() {
 
     return response.data.result.records;
   } catch (error) {
-    console.error('Error fetching stations:', error);
+    console.error('Error fetching stations:' + error);
     return [];
   }
 }
@@ -49,7 +49,7 @@ export async function getTrains(origen, destino) {
 
     return response.data.horario;
   } catch (error) {
-    console.error('Error fetching trains:', error);    
+    console.error('Error fetching trains:' + error);    
     return [];
   }
 }
