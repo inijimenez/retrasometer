@@ -55,5 +55,9 @@ export async function getTrains(origen, destino) {
 }
 
 
+const renfeApi = {
+  getStations,
+  getTrains,
+};
 
-export default { getStations, getTrains };
+export default renfeApi;
