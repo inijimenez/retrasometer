@@ -1,81 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-} from '@mui/material';
-import { getStations } from '../api/renfeApi';
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 
-const Form = ({ onFormSubmit }) => {
+import renfeApi from "../api/renfeApi";
+
+const Form = () => {
   const [stations, setStations] = useState([]);
-  const [origin, setOrigin] = useState('');
-  const [destination, setDestination] = useState('');
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
 
   useEffect(() => {
-    async function fetchStations() {
-      console.log("fethstations");
-      const fetchedStations = await getStations();
-      setStations(fetchedStations);
-    }
+    const fetchStations = async () => {
+      const stationList = await renfeApi.getStations();
+      const sortedStations = stationList.sort((a, b) => a.name.localeCompare(b.name));
+      setStations(sortedStations.map(station => ({ value: station.id, label: station.name })));
+    };
 
     fetchStations();
   }, []);
 
+  const handleChangeOrigin = (selectedOption) => {
+    setOrigin(selectedOption);
+  };
 
+  const handleChangeDestination = (selectedOption) => {
+    setDestination(selectedOption);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFormSubmit(origin, destination);
+    if (origin && destination) {
+      console.log("Origin:", origin.value, "Destination:", destination.value);
+    }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          RetrasoMeter
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <FormControl fullWidth variant="outlined" sx={{ mt: 2 }}>
-            <InputLabel>Estación de origen</InputLabel>
-            <Select
-              label="Estación de origen"
-              value={origin}
-              onChange={(e) => setOrigin(e.target.value)}
-            >
-              {stations.map((station) => (
-                <MenuItem key={station.CÓDIGO} value={station.CÓDIGO}>
-                  {station.DESCRIPCION}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth variant="outlined" sx={{ mt: 2 }}>
-            <InputLabel>Estación de destino</InputLabel>
-            <Select
-              label="Estación de destino"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-            >
-              {stations.map((station) => (
-                <MenuItem key={station.CÓDIGO} value={station.CÓDIGO}>
-                  {station.DESCRIPCION}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Box mt={4}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Buscar trenes
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Container>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Estación de origen:
+        <Select
+          value={origin}
+          onChange={handleChangeOrigin}
+          options={stations}
+          isClearable
+        />
+      </label>
+      <label>
+        Estación de destino:
+        <Select
+          value={destination}
+          onChange={handleChangeDestination}
+          options={stations}
+          isClearable
+        />
+      </label>
+      <button type="submit">Buscar</button>
+    </form>
   );
 };
 
