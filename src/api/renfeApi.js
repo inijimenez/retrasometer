@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://data.renfe.com/api/3/action/datastore_search';
-const HORARIOS_BASE_URL = 'https://horarios.renfe.com/cer/HorariosServlet';
+const API_BASE_URL = '/api/v1/';
+const HORARIOS_BASE_URL = '/api/v2/';
 
 const headers = {
   "User-Agent":
@@ -23,8 +23,7 @@ export async function getStations() {
     return response.data.result.records;
   } catch (error) {
     console.error('Error fetching stations:', error);
-    throw error;
-    //return [];
+    return [];
   }
 }
 
@@ -50,8 +49,7 @@ export async function getTrains(origen, destino) {
 
     return response.data.horario;
   } catch (error) {
-    console.error('Error fetching trains:', error);
-    throw error;
-    //return [];
+    console.error('Error fetching trains:', error);    
+    return [];
   }
 }
