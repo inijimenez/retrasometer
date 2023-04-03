@@ -53,3 +53,7 @@ export async function getTrains(origen, destino) {
     return [];
   }
 }
+
+
+
+export default { getStations, getTrains };
