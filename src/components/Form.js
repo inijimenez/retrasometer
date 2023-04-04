@@ -10,7 +10,6 @@ const Form = () => {
   const [destination, setDestination] = useState(null);
 
   const [trains, setTrains] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchStations = async () => {
