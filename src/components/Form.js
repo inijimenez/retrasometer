@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 import renfeApi from "../api/renfeApi";
+import TrainList from './TrainList';
 
 const Form = () => {
-  const [stations, setStations] = useState([]);
+  const [stations, setStations] = useState([]);  
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+
+  const [trains, setTrains] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -26,14 +30,24 @@ const Form = () => {
     setDestination(selectedOption);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (origin && destination) {
-      console.log("Origin:", origin.value, "Destination:", destination.value);
-    }
+  const handleSubmit = async (e) => {
+     e.preventDefault();
+
+    try {
+      if (origin && destination) {
+        console.log("Origin:", origin.value, "Destination:", destination.value);
+        const response = await renfeApi.getTrains(origin.value, destination.value);
+        setTrains(response.data);
+          
+      }
+  
+    } catch (error) {
+      console.error(error);
+    }    
   };
 
   return (
+    <div>
     <form onSubmit={handleSubmit}>
       <label>
         Estación de origen:
@@ -55,6 +69,8 @@ const Form = () => {
       </label>
       <button type="submit">Buscar</button>
     </form>
+    <TrainList trains={trains} />
+    </div>
   );
 };
 
