@@ -15,6 +15,8 @@ import { getTrains } from '../api/renfeApi';
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [selectedTrain, setSelectedTrain] = useState(null);
+  const [horaSalidaReal, setHoraSalidaReal] = useState(null);
+  const [diferenciaSalida, setDiferenciaSalida] = useState(null);
 
   useEffect(() => {
     const fetchTrains = async () => {
