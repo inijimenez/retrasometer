@@ -11,8 +11,8 @@ const Form = () => {
   useEffect(() => {
     const fetchStations = async () => {
       const stationList = await renfeApi.getStations();
-      const sortedStations = stationList.sort((a, b) => a.name.localeCompare(b.name));
-      setStations(sortedStations.map(station => ({ value: station.id, label: station.name })));
+      const sortedStations = stationList.sort((a, b) => a.DESCRIPCION.localeCompare(b.DESCRIPCION));
+      setStations(sortedStations.map(station => ({ value: station.CÓDIGO, label: station.DESCRIPCION })));
     };
 
     fetchStations();
