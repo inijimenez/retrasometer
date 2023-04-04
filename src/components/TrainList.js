@@ -30,6 +30,13 @@ const TrainList = ({ origin, destination }) => {
 
   const handleUpdateSalida = () => {
     // Actualizar HoraSalida (REAL) en función de la hora actual
+    const horaActual = new Date();
+    const horaSalidaEst = new Date(horaActual.getTime());
+    horaSalidaEst.setHours(...selectedTrain.horaSalida.split(':'));
+    const diffMinutos = Math.round((horaActual - horaSalidaEst) / (1000 * 60));
+
+    setHoraSalidaReal(horaActual);
+    setDiferenciaSalida(diffMinutos);
   };
 
   const handleUpdateLlegada = () => {
