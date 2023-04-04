@@ -15,8 +15,8 @@ import { getTrains } from '../api/renfeApi';
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [selectedTrain, setSelectedTrain] = useState(null);
-  const [horaSalidaReal, setHoraSalidaReal] = useState(null);
-  const [diferenciaSalida, setDiferenciaSalida] = useState(null);
+  const [salidaReal, setSalidaReal] = useState(null);
+  const [llegadaReal, setLlegadaReal] = useState(null);
 
   useEffect(() => {
     const fetchTrains = async () => {
@@ -32,17 +32,18 @@ const TrainList = ({ origin, destination }) => {
 
   const handleUpdateSalida = () => {
     // Actualizar HoraSalida (REAL) en función de la hora actual
-    const horaActual = new Date();
-    const horaSalidaEst = new Date(horaActual.getTime());
-    horaSalidaEst.setHours(...selectedTrain.horaSalida.split(':'));
-    const diffMinutos = Math.round((horaActual - horaSalidaEst) / (1000 * 60));
-
-    setHoraSalidaReal(horaActual);
-    setDiferenciaSalida(diffMinutos);
+    const now = new Date();
+    const salidaEst = new Date(now.toDateString() + ' ' + selectedTrain.horaSalida);
+    const diff = Math.floor((now - salidaEst) / 60000); // Diferencia en minutos
+    setSalidaReal(diff);
   };
 
   const handleUpdateLlegada = () => {
     // Actualizar HoraLlegada (REAL) en función de la hora actual
+    const now = new Date();
+    const llegadaEst = new Date(now.toDateString() + ' ' + selectedTrain.horaLlegada);
+    const diff = Math.floor((now - llegadaEst) / 60000); // Diferencia en minutos
+    setLlegadaReal(diff);
   };
 
   return (
@@ -76,11 +77,19 @@ const TrainList = ({ origin, destination }) => {
                     {selectedTrain && selectedTrain.cdgoTren === train.cdgoTren && (
                       <>
                         <TableCell>
-                          <Button onClick={handleUpdateSalida}>Actualizar Hora</Button>
+                        {salidaReal !== null ? (
+                            salidaReal + ' min'
+                          ) : (
+                            <Button onClick={handleUpdateSalida}>Actualizar Hora</Button>
+                          )}
                         </TableCell>
                         <TableCell>{train.horaLlegada}</TableCell>
                         <TableCell>
-                          <Button onClick={handleUpdateLlegada}>Actualizar Hora</Button>
+                        {llegadaReal !== null ? (
+                            llegadaReal + ' min'
+                          ) : (
+                            <Button onClick={handleUpdateLlegada}>Actualizar Hora</Button>
+                          )}
                         </TableCell>
                         <TableCell>{train.duracion}</TableCell>
                         <TableCell>-</TableCell>
