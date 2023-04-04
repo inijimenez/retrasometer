@@ -18,10 +18,10 @@ const TrainList = ({ trains }) => {
         </Typography>
         <List>
           {trains.map((train, index) => (
-            <React.Fragment key={train.trainId}>
+            <React.Fragment key={train.cdgoTren}>
               <ListItem>
                 <ListItemText
-                  primary={`${train.origin} - ${train.destination}`}
+                  primary={`${train.linea} - ${train.destination}`}
                   secondary={`Retraso: ${train.delay} minutos`}
                 />
               </ListItem>

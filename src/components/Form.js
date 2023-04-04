@@ -36,8 +36,8 @@ const Form = () => {
       if (origin && destination) {
         console.log("TEST a: Origin:", origin.value, "Destination:", destination.value);
         const response = await renfeApi.getTrains(origin.value, destination.value);
-        console.log("FIN");
-        setTrains(response.data);
+        console.log("FIN:" + response.peticion.descEstOrigen + " - "+ response.peticion.descEstDestino);
+        setTrains(response.horario);
           
       }
   

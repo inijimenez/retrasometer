@@ -47,7 +47,7 @@ export async function getTrains(origen, destino) {
     },
     { headers });
 
-    return response.data.horario;
+    return response.data;
   } catch (error) {
     console.error('Error fetching trains:' + error);    
     return [];
