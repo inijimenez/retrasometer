@@ -35,13 +35,15 @@ const Form = () => {
 
     try {
       if (origin && destination) {
-        console.log("Origin:", origin.value, "Destination:", destination.value);
+        console.log("TEST a: Origin:", origin.value, "Destination:", destination.value);
         const response = await renfeApi.getTrains(origin.value, destination.value);
+        console.log("FIN");
         setTrains(response.data);
           
       }
   
     } catch (error) {
+      console.log("Error:" + error);
       console.error(error);
     }    
   };
