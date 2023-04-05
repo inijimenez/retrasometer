@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Button } from '@mui/m
 const TrainList = ({ trains }) => {
   const [selectedTrainId, setSelectedTrainId] = useState(null);
   const [trainRealTimes, setTrainRealTimes] = useState({});
-  const selected = false;
+  
 
   const handleRowClick = (trainId) => {
     setSelectedTrainId(trainId);
@@ -49,7 +49,7 @@ const TrainList = ({ trains }) => {
       <TableBody>
         {trains.map((train, index) => {
           const trainRealTimesData = trainRealTimes[train.cdgoTren] || {};
-          selected = selectedTrainId === train.cdgoTren;
+          const selected = selectedTrainId === train.cdgoTren;
           const timeDiffSalida = trainRealTimesData.salida
             ? calculateTimeDifference(train.horaSalida, trainRealTimesData.salida)
             : null;
