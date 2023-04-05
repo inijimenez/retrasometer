@@ -55,7 +55,9 @@ export async function fetchTrains(origin, destination) {
       { headers });
 
     if (response.data) {
-      console.log("HAY estos TRENES:" + response.data);
+      console.log("HAY estos TRENES:");
+      console.log(JSON.stringify(response.data))
+      console.log("fin HAY");
       return response.data.horario;
     }
     else{
