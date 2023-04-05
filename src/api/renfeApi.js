@@ -39,6 +39,7 @@ export async function fetchTrains(origin, destination) {
   const horaSiguiente = new Date(Date.now() + 3600 * 1000).getHours();
 
   try {
+    console.log("FETCH TRAINS");
     const response = await axios.post(HORARIOS_BASE_URL , {
       nucleo: '10',
       origen: origin.CÓDIGO,
@@ -66,7 +67,7 @@ export async function fetchTrains(origin, destination) {
 
 const renfeApi = {
   fetchStations,
-  fetchTrains
+  fetchTrains,
 };
 
 export default renfeApi;
