@@ -9,6 +9,7 @@ const App = () => {
   const [originStation, setOriginStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [trains, setTrains] = useState([]);
+  const [stationsChanged, setStationsChanged] = useState(false);
 
   useEffect(() => {
     const loadStations = async () => {
@@ -28,6 +29,10 @@ const App = () => {
       }
     };
     loadTrains();
+  }, [originStation, destinationStation]);
+  
+  useEffect(() => {
+    setStationsChanged(true);
   }, [originStation, destinationStation]);
 
   return (
@@ -58,7 +63,7 @@ const App = () => {
         </Grid>
       </Grid>
       {trains.length > 0 ? (
-        <TrainList trains={trains}  resetKey={`${originStation}-${destinationStation}`} />
+        <TrainList trains={trains}  stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)}/>
       ) : (
         <Typography variant="subtitle1" align="center">
           No se ha encontrado ningún tren.
