@@ -33,12 +33,18 @@ const App = () => {
           selectedStations={selectedStations}
           onStationChange={handleStationChange}
         />
-        {isSearchEnabled() && (
+        {isSearchEnabled() && trains.length > 0 ? (
           <TrainList
             origin={selectedStations.origin}
             destination={selectedStations.destination}
           />
+        ) : (
+          <Typography variant="subtitle1" align="center">
+            No se ha encontrado ningún tren.
+          </Typography>
         )}
+
+
       </Box>
     </Container>
   );

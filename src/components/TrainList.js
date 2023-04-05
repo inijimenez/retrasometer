@@ -15,8 +15,8 @@ import { getTrains } from '../api/renfeApi';
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [selectedTrain, setSelectedTrain] = useState(null);
-  const [salidaReal, setSalidaReal] = useState(null);
-  const [llegadaReal, setLlegadaReal] = useState(null);
+  const [departureDifference, setDepartureDifference] = useState(null);
+  const [arrivalDifference, setArrivalDifference] = useState(null);
 
   useEffect(() => {
     const fetchTrains = async () => {
@@ -35,7 +35,8 @@ const TrainList = ({ origin, destination }) => {
     const now = new Date();
     const salidaEst = new Date(now.toDateString() + ' ' + selectedTrain.horaSalida);
     const diff = Math.floor((now - salidaEst) / 60000); // Diferencia en minutos
-    setSalidaReal(diff);
+    setSalidaReal(now);
+    setDiffSalidaReal(diff);
   };
 
   const handleUpdateLlegada = () => {
