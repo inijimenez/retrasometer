@@ -35,7 +35,7 @@ const TrainList = ({ trains }) => {
           <TableCell>Línea</TableCell>
           <TableCell>Tren</TableCell>
           <TableCell>HoraSalidaEST</TableCell>
-          {selected && (
+          {selectedTrainId && (
             <>
               <TableCell>HoraSalidaREAL</TableCell>
               <TableCell>HoraLlegadaEST</TableCell>
