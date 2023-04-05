@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box} from '@mui/material';
+import { Container, Typography, Grid} from '@mui/material';
 import StationSelect from './components/StationSelect';
 import TrainList from './components/TrainList';
 import { fetchStations, fetchTrains } from './api/renfeApi';
