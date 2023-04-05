@@ -33,14 +33,13 @@ export async function fetchStations() {
 }
 
 export async function fetchTrains(origin, destination) {
-  
+
   const fechaActual = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const horaAnterior = new Date(Date.now() - 3600 * 1000).getHours();
   const horaSiguiente = new Date(Date.now() + 3600 * 1000).getHours();
 
   try {
-    console.log("FETCH TRAINS");
-    const response = await axios.post(HORARIOS_BASE_URL , {
+    const response = await axios.post(HORARIOS_BASE_URL, {
       nucleo: '10',
       origen: origin.CÓDIGO,
       destino: destination.CÓDIGO,
@@ -55,13 +54,8 @@ export async function fetchTrains(origin, destination) {
       { headers });
 
     if (response.data) {
-      console.log("HAY estos TRENES:");
-      console.log(JSON.stringify(response.data))
-      console.log("fin HAY");
-      return response.data.horario;
-    }
-    else{
-      console.log("NO HAY TRENES");
+      if (response.data.horario)
+        return response.data.horario;
     }
   } catch (error) {
     console.error('Error fetching trains:', error);
