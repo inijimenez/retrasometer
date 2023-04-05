@@ -73,6 +73,8 @@ const TrainList = ({ trains }) => {
               <TableCell>{train.linea}</TableCell>
               <TableCell>{train.cdgoTren}</TableCell>
               <TableCell>{train.horaSalida}</TableCell>
+              {selectedTrainId && (
+            <>
               <TableCell>
                 {selected && timeDiffSalida === null ? (
                   <Button
@@ -123,6 +125,9 @@ const TrainList = ({ trains }) => {
                   <span>{durationReal} min</span>
                 )}
               </TableCell>
+              </>
+          )}
+
             </TableRow>
           );
         })}
