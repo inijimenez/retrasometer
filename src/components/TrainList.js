@@ -34,11 +34,15 @@ const TrainList = ({ trains }) => {
           <TableCell>Línea</TableCell>
           <TableCell>Tren</TableCell>
           <TableCell>HoraSalidaEST</TableCell>
-          <TableCell>HoraSalidaREAL</TableCell>
-          <TableCell>HoraLlegadaEST</TableCell>
-          <TableCell>HoraLlegadaREAL</TableCell>
-          <TableCell>DuracionEST</TableCell>
-          <TableCell>DuracionREAL</TableCell>
+          {selected && (
+            <>
+              <TableCell>HoraSalidaREAL</TableCell>
+              <TableCell>HoraLlegadaEST</TableCell>
+              <TableCell>HoraLlegadaREAL</TableCell>
+              <TableCell>DuracionEST</TableCell>
+              <TableCell>DuracionREAL</TableCell>
+            </>
+          )}
         </TableRow>
       </TableHead>
       <TableBody>
