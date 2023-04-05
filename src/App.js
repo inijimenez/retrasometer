@@ -24,7 +24,8 @@ const App = () => {
         console.log("aAntes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
         const fetchedTrains = await fetchTrains(originStation.CÓDIGO, destinationStation.CÓDIGO);
         console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
-        console.log("hay:" + fetchedTrains.length);
+        console.log("ahora hay:" + fetchedTrains.length +  "trenes");
+        console.debug();
         setTrains(fetchedTrains);
       }
     };
