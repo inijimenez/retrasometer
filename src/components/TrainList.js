@@ -1,80 +1,128 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Button } from '@mui/material';
 
 const TrainList = ({ trains }) => {
-  const [selectedTrainIndex, setSelectedTrainIndex] = useState(null);
-  const [realTimes, setRealTimes] = useState({});
+  const [selectedTrainId, setSelectedTrainId] = useState(null);
+  const [trainRealTimes, setTrainRealTimes] = useState({});
 
-  const updateRealTime = (type, trainIndex) => {
+  const handleRowClick = (trainId) => {
+    setSelectedTrainId(trainId);
+  };
+
+  const handleRealTimeUpdate = (trainId, type) => {
     const currentTime = new Date();
-    const minutes = currentTime.getMinutes();
-    const hours = currentTime.getHours();
-    const realTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-    setRealTimes(prevRealTimes => ({
-      ...prevRealTimes,
-      [trainIndex]: {
-        ...prevRealTimes[trainIndex],
-        [type]: realTime
-      }
+    setTrainRealTimes((prevTrainRealTimes) => ({
+      ...prevTrainRealTimes,
+      [trainId]: { ...prevTrainRealTimes[trainId], [type]: currentTime },
     }));
   };
 
+  const calculateTimeDifference = (estTime, realTime) => {
+    const estDateTime = new Date(realTime.getTime());
+    const estTimeParts = estTime.split(':');
+    estDateTime.setHours(parseInt(estTimeParts[0], 10));
+    estDateTime.setMinutes(parseInt(estTimeParts[1], 10));
+
+    const diffInMilliseconds = realTime.getTime() - estDateTime.getTime();
+    return Math.floor(diffInMilliseconds / 1000 / 60);
+  };
+
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Línea</TableCell>
-            <TableCell>Tren</TableCell>
-            <TableCell>HoraSalidaEST</TableCell>
-            {selectedTrainIndex !== null && (
-              <>
-                <TableCell>HoraSalidaREAL</TableCell>
-                <TableCell>HoraLlegadaEST</TableCell>
-                <TableCell>HoraLlegadaREAL</TableCell>
-                <TableCell>DuracionEST</TableCell>
-                <TableCell>DuracionREAL</TableCell>
-              </>
-            )}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {trains.map((train, index) => (
-            <TableRow key={index} onClick={() => setSelectedTrainIndex(index)}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Línea</TableCell>
+          <TableCell>Tren</TableCell>
+          <TableCell>HoraSalidaEST</TableCell>
+          <TableCell>HoraSalidaREAL</TableCell>
+          <TableCell>HoraLlegadaEST</TableCell>
+          <TableCell>HoraLlegadaREAL</TableCell>
+          <TableCell>DuracionEST</TableCell>
+          <TableCell>DuracionREAL</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {trains.map((train, index) => {
+          const trainRealTimesData = trainRealTimes[train.cdgoTren] || {};
+          const selected = selectedTrainId === train.cdgoTren;
+          const timeDiffSalida = trainRealTimesData.salida
+            ? calculateTimeDifference(train.horaSalida, trainRealTimesData.salida)
+            : null;
+          const timeDiffLlegada = trainRealTimesData.llegada
+            ? calculateTimeDifference(train.horaLlegada, trainRealTimesData.llegada)
+            : null;
+          const durationReal =
+            trainRealTimesData.salida && trainRealTimesData.llegada
+              ? calculateTimeDifference(
+                train.horaLlegada,
+                trainRealTimesData.llegada,
+              ) -
+              calculateTimeDifference(
+                train.horaSalida,
+                trainRealTimesData.salida,
+              )
+              : null;
+
+          return (
+            <TableRow key={index} onClick={() => handleRowClick(train.cdgoTren)}>
               <TableCell>{train.linea}</TableCell>
               <TableCell>{train.cdgoTren}</TableCell>
               <TableCell>{train.horaSalida}</TableCell>
-              {selectedTrainIndex === index && (
-                <>
-                  <TableCell>
-                    {realTimes[index]?.HoraSalidaREAL ? (
-                      realTimes[index].HoraSalidaREAL
-                    ) : (
-                      <Button onClick={() => updateRealTime('HoraSalidaREAL', index)}>Actualizar Hora</Button>
-                    )}
-                  </TableCell>
-                  <TableCell>{train.horaLlegada}</TableCell>
-                  <TableCell>
-                    {realTimes[index]?.HoraLlegadaREAL ? (
-                      realTimes[index].HoraLlegadaREAL
-                    ) : (
-                      <Button onClick={() => updateRealTime('HoraLlegadaREAL', index)}>Actualizar Hora</Button>
-                    )}
-                  </TableCell>
-                  <TableCell>{train.duracion}</TableCell>
-                  <TableCell>
-                    {realTimes[index]?.HoraSalidaREAL && realTimes[index]?.HoraLlegadaREAL
-                      ? /* Calcular y mostrar la diferencia de tiempo aquí */
-                      : '-'}
-                  </TableCell>
-                </>
-              )}
+              <TableCell>
+                {selected && timeDiffSalida === null ? (
+                  <Button
+                    onClick={() =>
+                      handleRealTimeUpdate(train.cdgoTren, 'salida')
+                    }
+                  >
+                    Actualizar Hora
+                  </Button>
+                ) : (
+                  selected && (
+                    <span
+                      style={{
+                        color: timeDiffSalida > 0 ? 'red' : 'green',
+                      }}
+                    >
+                      {timeDiffSalida} min
+                    </span>
+                  )
+                )}
+              </TableCell>
+              <TableCell>{train.horaLlegada}</TableCell>
+              <TableCell>
+                {
+                  selected && timeDiffLlegada === null ? (
+                    <Button
+                      onClick={() =>
+                        handleRealTimeUpdate(train.cdgoTren, 'llegada')
+                      }
+                    >
+                      Actualizar Hora
+                    </Button>
+                  ) : (
+                    selected && (
+                      <span
+                        style={{
+                          color: timeDiffLlegada > 0 ? 'red' : 'green',
+                        }}
+                      >
+                        {timeDiffLlegada} min
+                      </span>
+                    )
+                  )}
+              </TableCell>
+              <TableCell>{train.duracion}</TableCell>
+              <TableCell>
+                {selected && durationReal !== null && (
+                  <span>{durationReal} min</span>
+                )}
+              </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 };
 
