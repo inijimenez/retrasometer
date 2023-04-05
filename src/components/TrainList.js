@@ -8,9 +8,14 @@ import {
   Button,
 } from '@mui/material';
 
-const TrainList = ({ trains }) => {
+const TrainList = ({ trains, resetKey }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [timeDiffs, setTimeDiffs] = useState({});
+
+  useEffect(() => {
+    setSelectedRow(null);
+    setTimeDiffs({});
+  }, [resetKey]);
 
   const handleRowClick = (index) => {
     setSelectedRow(index);

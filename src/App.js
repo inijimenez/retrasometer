@@ -58,7 +58,7 @@ const App = () => {
         </Grid>
       </Grid>
       {trains.length > 0 ? (
-        <TrainList trains={trains} />
+        <TrainList trains={trains}  resetKey={`${originStation}-${destinationStation}`} />
       ) : (
         <Typography variant="subtitle1" align="center">
           No se ha encontrado ningún tren.
