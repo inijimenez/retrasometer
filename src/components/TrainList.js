@@ -16,14 +16,17 @@ const TrainList = ({ trains }) => {
     setSelectedRow(index);
   };
 
-  const handleRealTimeUpdate = (trenCode, type, horaSalidaOuLlegada) => {
-    const currentTime = new Date();
-    const trainTime = new Date(horaSalidaOuLlegada);
-    const timeDiff = Math.floor((currentTime - trainTime) / 60000);
+  const updateTimeDiff = (type, estTime, index) => {
+    const now = new Date();
+    const estDateTime = new Date(now.toDateString() + ' ' + estTime);
+    const diff = Math.floor((now - estDateTime) / 60000);
 
-    setTimeDiffs((prevState) => ({
-      ...prevState,
-      [trenCode]: { ...prevState[trenCode], [type]: { time: currentTime, diff: timeDiff } },
+    setTimeDiffs((prev) => ({
+      ...prev,
+      [index]: {
+        ...prev[index],
+        [type]: { timeReal: now, timeDiff: diff },
+      },
     }));
   };
 
@@ -33,96 +36,104 @@ const TrainList = ({ trains }) => {
         <TableRow>
           <TableCell>Línea</TableCell>
           <TableCell>Tren</TableCell>
-          <TableCell>HoraSalidaEST</TableCell>
+          <TableCell>Hora Salida EST</TableCell>
+          <TableCell>Hora Llegada EST</TableCell>
+          <TableCell>Duración EST</TableCell>
           {selectedRow !== null && (
             <>
-              <TableCell>HoraSalidaREAL</TableCell>
-              <TableCell>HoraLlegadaEST</TableCell>
-              <TableCell>HoraLlegadaREAL</TableCell>
-              <TableCell>DuracionEST</TableCell>
-              <TableCell>DuracionREAL</TableCell>
+              <TableCell>Hora Salida REAL</TableCell>
+              <TableCell>Hora Llegada REAL</TableCell>
+              <TableCell>Duración REAL</TableCell>
             </>
           )}
         </TableRow>
       </TableHead>
       <TableBody>
         {trains.map((train, index) => {
-          const selected = index === selectedRow;
-          const timeDiffSalida = timeDiffs[train.cdgoTren]?.salida?.diff;
-          const timeRealSalida = timeDiffs[train.cdgoTren]?.salida?.time;
-          const timeDiffLlegada = timeDiffs[train.cdgoTren]?.llegada?.diff;
-          const timeRealLlegada = timeDiffs[train.cdgoTren]?.llegada?.time;
-          const durationReal =
-            timeDiffSalida !== undefined && timeDiffLlegada !== undefined
-              ? timeDiffLlegada - timeDiffSalida
-              : null;
+          if (selectedRow === null || selectedRow === index) {
+            const timeRealSalida = timeDiffs[index]?.salida?.timeReal;
+            const timeDiffSalida = timeDiffs[index]?.salida?.timeDiff;
+            const timeRealLlegada = timeDiffs[index]?.llegada?.timeReal;
+            const timeDiffLlegada = timeDiffs[index]?.llegada?.timeDiff;
+            const durationReal =
+              timeRealSalida &&
+              timeRealLlegada &&
+              Math.floor((timeRealLlegada - timeRealSalida) / 60000);
 
-          return (
-            <TableRow key={index} onClick={() => handleRowClick(index)}>
-              <TableCell>{train.linea}</TableCell>
-              <TableCell>{train.cdgoTren}</TableCell>
-              <TableCell>{train.horaSalida}</TableCell>
-              {selected && (
-                <>
-                  <TableCell>
-                    {timeRealSalida === undefined ? (
-                      <Button
-                        onClick={() =>
-                          handleRealTimeUpdate(train.cdgoTren, 'salida', train.horaSalida)
-                        }
-                      >
-                        Actualizar Hora
-                      </Button>
-                    ) : (
-                      <span>
-                        {timeRealSalida.toLocaleTimeString()} (
-                        <span
-                          style={{
-                            color: timeDiffSalida > 0 ? 'red' : 'green',
-                          }}
-                        >
-                          {timeDiffSalida} min
+            return (
+              <TableRow
+                key={train.cdgoTren}
+                onClick={() => handleRowClick(index)}
+              >
+                <TableCell>{train.linea}</TableCell>
+                <TableCell>{train.cdgoTren}</TableCell>
+                <TableCell>{train.horaSalida}</TableCell>
+                <TableCell>{train.horaLlegada}</TableCell>
+                <TableCell>{train.duracion}</TableCell>
+                {selectedRow === index && (
+                  <>
+                    <TableCell>
+                      {timeRealSalida ? (
+                        <span>
+                          {timeRealSalida.toLocaleTimeString()} (
+                          <span
+                            style={{
+                              color: timeDiffSalida > 0 ? 'red' : 'green',
+                            }}
+                          >
+                            {timeDiffSalida} min
+                          </span>
+                          )
                         </span>
-                        )
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>{train.horaLlegada}</TableCell>
-                  <TableCell>
-                    {timeRealLlegada === undefined ? (
-                      <Button
-                        onClick={() =>
-                          handleRealTimeUpdate(train.cdgoTren, 'llegada', train.horaLlegada)
-                        }
-                      >
-                        Actualizar Hora
-                      </Button>
-                    ) : (
-                      <span>
-                        {timeRealLlegada.toLocaleTimeString()} (
-                        <span
-                          style={{
-                            color: timeDiffLlegada > 0 ? 'red' : 'green',
-                          }}
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          onClick={() =>
+                            updateTimeDiff('salida', train.horaSalida, index)
+                          }
                         >
-                          {timeDiffLlegada} min
+                          Actualizar Hora
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {timeRealLlegada ? (
+                        <span>
+                          {timeRealLlegada.toLocaleTimeString()} (
+                          <span
+                            style={{
+                              color: timeDiffLlegada > 0 ? 'red' : 'green',
+                            }}
+                          >
+                            {timeDiffLlegada} min
+                          </span>
+                          )
                         </span>
-                        )
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>{train.duracion}</TableCell>
-                  <TableCell>
-                    {durationReal !== null && (
-                      <span>
-                        {durationReal} min
-                      </span>
-                    )}
-                  </TableCell>
-                </>
-              )}
-            </TableRow>
-          );
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          onClick={() =>
+                            updateTimeDiff('llegada', train.horaLlegada, index)
+                          }
+                        >
+                          Actualizar Hora
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {durationReal ? (
+                        <span>{durationReal} min</span>
+                      ) : (
+                        '-'
+                      )}
+                    </TableCell>
+                  </>
+                )}
+              </TableRow>
+            );
+          } else {
+            return null;
+          }
         })}
       </TableBody>
     </Table>
