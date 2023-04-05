@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     const loadTrains = async () => {
       if (originStation && destinationStation) {
-        console.log("Antes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
+        console.log("aAntes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
         const fetchedTrains = await fetchTrains(originStation.CÓDIGO, destinationStation.CÓDIGO);
         console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
         setTrains(fetchedTrains);
