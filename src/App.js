@@ -36,6 +36,7 @@ const App = () => {
       <Typography variant="h6" align="center">
         Versión 1.0
       </Typography>
+    
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <StationSelect

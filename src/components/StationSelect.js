@@ -4,6 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 const StationSelect = ({ stations, label, value, onChange }) => {
   return (
+    <Box>
     <Autocomplete
       value={value}
       onChange={(event, newValue) => {
@@ -13,6 +14,7 @@ const StationSelect = ({ stations, label, value, onChange }) => {
       getOptionLabel={(option) => option.DESCRIPCION}
       renderInput={(params) => <TextField {...params} label={label} />}
     />
+    </Box>
   );
 };
 
