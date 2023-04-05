@@ -1,51 +1,66 @@
-import React, { useState } from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Grid } from '@mui/material';
 import StationSelect from './components/StationSelect';
 import TrainList from './components/TrainList';
+import { fetchStations, fetchTrains } from './api/renfeApi';
 
 const App = () => {
-  const [selectedStations, setSelectedStations] = useState({
-    origin: null,
-    destination: null,
-  });
+  const [stations, setStations] = useState([]);
+  const [originStation, setOriginStation] = useState(null);
+  const [destinationStation, setDestinationStation] = useState(null);
+  const [trains, setTrains] = useState([]);
 
-  const handleStationChange = (type, station) => {
-    setSelectedStations((prevState) => ({
-      ...prevState,
-      [type]: station,
-    }));
-  };
+  useEffect(() => {
+    const loadStations = async () => {
+      const fetchedStations = await fetchStations();
+      setStations(fetchedStations);
+    };
+    loadStations();
+  }, []);
 
-  const isSearchEnabled = () => {
-    return selectedStations.origin && selectedStations.destination;
-  };
+  useEffect(() => {
+    const loadTrains = async () => {
+      if (originStation && destinationStation) {
+        const fetchedTrains = await fetchTrains(originStation.CÓDIGO, destinationStation.CÓDIGO);
+        setTrains(fetchedTrains);
+      }
+    };
+    loadTrains();
+  }, [originStation, destinationStation]);
 
   return (
-    <Container maxWidth="md">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Retrasometer
-        </Typography>
-        <Typography variant="subtitle1">
-          Versión 1.0.0
-        </Typography>
-        <StationSelect
-          selectedStations={selectedStations}
-          onStationChange={handleStationChange}
-        />
-        {isSearchEnabled() && trains.length > 0 ? (
-          <TrainList
-            origin={selectedStations.origin}
-            destination={selectedStations.destination}
+    <Container>
+      <Typography variant="h4" align="center">
+        Retrasometer
+      </Typography>
+      <Typography variant="h6" align="center">
+        Versión 1.0
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <StationSelect
+            stations={stations}
+            label="Estación de origen"
+            value={originStation}
+            onChange={setOriginStation}
           />
-        ) : (
-          <Typography variant="subtitle1" align="center">
-            No se ha encontrado ningún tren.
-          </Typography>
-        )}
-
-
-      </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <StationSelect
+            stations={stations}
+            label="Estación de destino"
+            value={destinationStation}
+            onChange={setDestinationStation}
+          />
+        </Grid>
+      </Grid>
+      {trains.length > 0 ? (
+        <TrainList trains={trains} />
+      ) : (
+        <Typography variant="subtitle1" align="center">
+          No se ha encontrado ningún tren.
+        </Typography>
+      )}
     </Container>
   );
 };

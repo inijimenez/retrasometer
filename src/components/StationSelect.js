@@ -1,39 +1,18 @@
 import React from 'react';
-import { Autocomplete, TextField, Box } from '@mui/material';
-import { getStations } from '../api/renfeApi';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
-const StationSelect = ({ selectedStations, onStationChange }) => {
-  const [stations, setStations] = React.useState([]);
-
-  React.useEffect(() => {
-    const fetchStations = async () => {
-      const fetchedStations = await getStations();
-      setStations(fetchedStations);
-    };
-    fetchStations();
-  }, []);
-
+const StationSelect = ({ stations, label, value, onChange }) => {
   return (
-    <Box>
-      <Autocomplete
-        options={stations}
-        getOptionLabel={(option) => option.DESCRIPCION}
-        value={selectedStations.origin}
-        onChange={(event, newValue) => onStationChange('origin', newValue)}
-        renderInput={(params) => (
-          <TextField {...params} label="Estación de origen" variant="outlined" />
-        )}
-      />
-      <Autocomplete
-        options={stations}
-        getOptionLabel={(option) => option.DESCRIPCION}
-        value={selectedStations.destination}
-        onChange={(event, newValue) => onStationChange('destination', newValue)}
-        renderInput={(params) => (
-          <TextField {...params} label="Estación de destino" variant="outlined" />
-        )}
-      />
-    </Box>
+    <Autocomplete
+      value={value}
+      onChange={(event, newValue) => {
+        onChange(newValue);
+      }}
+      options={stations}
+      getOptionLabel={(option) => option.DESCRIPCION}
+      renderInput={(params) => <TextField {...params} label={label} />}
+    />
   );
 };
 

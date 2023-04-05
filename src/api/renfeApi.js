@@ -9,7 +9,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export async function getStations() {
+export async function fetchStations() {
   try {
     const response = await axios.post(ESTACIONES_BASE_URL, {
       resource_id: 'daa68d9b-77cf-4024-890f-285d31184c5a',
@@ -32,7 +32,7 @@ export async function getStations() {
   return [];
 }
 
-export async function getTrains(origin, destination) {
+export async function fetchTrains(origin, destination) {
   
   const fechaActual = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const horaAnterior = new Date(Date.now() - 3600 * 1000).getHours();
@@ -65,8 +65,8 @@ export async function getTrains(origin, destination) {
 
 
 const renfeApi = {
-  getStations,
-  getTrains,
+  fetchStations,
+  fetchTrains
 };
 
 export default renfeApi;
