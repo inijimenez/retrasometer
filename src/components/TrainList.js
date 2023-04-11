@@ -37,7 +37,7 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
 
   return (
     <div className="tableContainer">
-      <Table className="table">
+      <Table className="table"  size="small">
         <TableHead>
           <TableRow>
             <TableCell className="tableCell">Línea</TableCell>
