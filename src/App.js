@@ -3,7 +3,7 @@ import { Container, Typography, Grid } from '@mui/material';
 import StationSelect from './components/StationSelect';
 import TrainList from './components/TrainList';
 import { fetchStations, fetchTrains } from './api/renfeApi';
-import './styles/styles.css';
+
 
 const App = () => {
   const [stations, setStations] = useState([]);

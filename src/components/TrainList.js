@@ -6,11 +6,28 @@ import {
   TableHead,
   TableRow,
   Button,
+  TableContainer,
+  Paper,
+  makeStyles,
 } from '@mui/material';
+
+const useStyles = makeStyles((theme) => ({
+  headerText: {
+    writingMode: 'vertical-rl',
+    textOrientation: 'mixed',
+    fontWeight: 'bold',
+    whiteSpace: 'nowrap',    
+  },
+  tableContainer: {
+    maxHeight: 400,
+    overflowX: 'auto',
+  },
+}));
 
 const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [timeDiffs, setTimeDiffs] = useState({});
+  const classes = useStyles();
 
   useEffect(() => {
     setSelectedRow(null);
@@ -36,28 +53,28 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
   };
 
   return (
-    <div className="tableContainer">
-      <Table className="table"  size="small">
+      <TableContainer className={classes.tableContainer} component={Paper}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell className="headerCell tableCell">Línea</TableCell>
-            <TableCell className="headerCell tableCell">Tren</TableCell>
-            <TableCell className="headerCell tableCell">Hora Salida EST</TableCell>
+            <TableCell className={classes.headerText}>Línea</TableCell>
+            <TableCell className={classes.headerText}>Tren</TableCell>
+            <TableCell className={classes.headerText}>Hora Salida EST</TableCell>
             {selectedRow !== null && (
               <>
-                <TableCell className="headerCell tableCell">Hora Salida REAL</TableCell>
+                <TableCell className={classes.headerText}>Hora Salida REAL</TableCell>
               </>
             )}
-            <TableCell className="headerCell tableCell">Hora Llegada EST</TableCell>
+            <TableCell className={classes.headerText}>Hora Llegada EST</TableCell>
             {selectedRow !== null && (
               <>
-                <TableCell className="headerCell tableCell"> Hora Llegada REAL</TableCell>
+                <TableCell className={classes.headerText}> Hora Llegada REAL</TableCell>
               </>
             )}
-            <TableCell className="headerCell tableCell">Duración EST</TableCell>
+            <TableCell className={classes.headerText}>Duración EST</TableCell>
             {selectedRow !== null && (
               <>
-                <TableCell className="headerCell tableCell">Duración REAL</TableCell>
+                <TableCell className={classes.headerText}>Duración REAL</TableCell>
               </>
             )}
 
@@ -162,7 +179,7 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
           })}
         </TableBody>
       </Table>
-    </div>
+      </TableContainer>
   );
 };
 
