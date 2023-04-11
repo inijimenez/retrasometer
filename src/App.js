@@ -11,12 +11,15 @@ const App = () => {
   const [destinationStation, setDestinationStation] = useState(null);
   const [trains, setTrains] = useState([]);
   const [stationsChanged, setStationsChanged] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingStations, setIsLoadingStations] = useState(false);
+  const [isLoadingTrains, setIsLoadingTrains] = useState(false);
 
   useEffect(() => {
     const loadStations = async () => {
+      setIsLoadingStations(true); // Establecer isLoading en true antes de la llamada a la API
       const fetchedStations = await fetchStations();
       setStations(fetchedStations);
+      setIsLoadingStations(false); // Establecer isLoading en false antes de la llamada a la API
     };
     loadStations();
   }, []);
@@ -24,12 +27,12 @@ const App = () => {
   useEffect(() => {
     const loadTrains = async () => {
       if (originStation && destinationStation) {
-        setIsLoading(true); // Establecer isLoading en true antes de la llamada a la API
+        setIsLoadingTrains(true); // Establecer isLoading en true antes de la llamada a la API
         //console.log("Antes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
         const fetchedTrains = await fetchTrains(originStation, destinationStation);
         //console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);        
         setTrains(fetchedTrains);
-        setIsLoading(false); // Establecer isLoading en false despues de la llamada a la API
+        setIsLoadingTrains(false); // Establecer isLoading en false despues de la llamada a la API
       }
     };
     loadTrains();
@@ -47,27 +50,30 @@ const App = () => {
       <Typography variant="h6" align="center">
         Versión 1.0
       </Typography>
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <StationSelect
-            stations={stations}
-            label="Estación de origen"
-            value={originStation}
-            onChange={setOriginStation}
-          />
+      {isLoadingStations ? (
+        <div>Cargando datos estaciones...</div>
+      ) : (
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <StationSelect
+              stations={stations}
+              label="Estación de origen"
+              value={originStation}
+              onChange={setOriginStation}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <StationSelect
+              stations={stations}
+              label="Estación de destino"
+              value={destinationStation}
+              onChange={setDestinationStation}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <StationSelect
-            stations={stations}
-            label="Estación de destino"
-            value={destinationStation}
-            onChange={setDestinationStation}
-          />
-        </Grid>
-      </Grid>
-      {isLoading ? (
-        <div>Cargando datos...</div>
+      )}
+      {isLoadingTrains ? (
+        <div>Cargando datos trayectos...</div>
       ) : (
         trains.length > 0 ? (
           <TrainList trains={trains} stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)} />
