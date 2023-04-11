@@ -69,7 +69,13 @@ const App = () => {
       {isLoading ? (
         <div>Cargando datos...</div>
       ) : (
-<div>Hay Trenes</div>
+        trains.length > 0 ? (
+          <TrainList trains={trains} stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)} />
+        ) : (
+          <Typography variant="subtitle1" align="center">
+            No se ha encontrado ningún tren.
+          </Typography>
+        )
       )}
     </Container>
   );
