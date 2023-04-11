@@ -1,0 +1,17 @@
+/* styles.css */
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+  
+  .table {
+    table-layout: fixed;
+    white-space: nowrap;
+  }
+  
+  .tableCell {
+    width: 1px;
+    padding: 6px 16px;
+    white-space: nowrap;
+  }
