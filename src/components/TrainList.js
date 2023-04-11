@@ -40,15 +40,15 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
       <Table className="table"  size="small">
         <TableHead>
           <TableRow>
-            <TableCell className="tableCell">Línea</TableCell>
-            <TableCell className="tableCell">Tren</TableCell>
-            <TableCell className="tableCell">Hora Salida EST</TableCell>
+            <TableCell className="headerCell tableCell">Línea</TableCell>
+            <TableCell className="headerCell tableCell">Tren</TableCell>
+            <TableCell className="headerCell tableCell">Hora Salida EST</TableCell>
             {selectedRow !== null && (
               <>
-                <TableCell className="tableCell">Hora Salida REAL</TableCell>
+                <TableCell className="headerCell tableCell">Hora Salida REAL</TableCell>
               </>
             )}
-            <TableCell className="tableCell">Hora Llegada EST</TableCell>
+            <TableCell className="headerCell tableCell">Hora Llegada EST</TableCell>
             {selectedRow !== null && (
               <>
                 <TableCell className="tableCell"> Hora Llegada REAL</TableCell>
