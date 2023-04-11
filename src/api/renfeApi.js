@@ -11,6 +11,12 @@ const headers = {
 
 export async function fetchStations() {
   try {
+    const cachedStations = localStorage.getItem("stations");
+
+    if (cachedStations) {
+      return JSON.parse(cachedStations);
+    }
+
     const response = await axios.post(ESTACIONES_BASE_URL, {
       resource_id: 'daa68d9b-77cf-4024-890f-285d31184c5a',
       q: '',
@@ -21,9 +27,11 @@ export async function fetchStations() {
       { headers });
 
     if (response.data.success) {
-      return response.data.result.records.sort((a, b) =>
+      const stations = response.data.result.records.sort((a, b) =>
         a.DESCRIPCION.localeCompare(b.DESCRIPCION)
       );
+      localStorage.setItem("stations", JSON.stringify(stations));
+      return stations;
     }
   } catch (error) {
     console.error('Error fetching stations:', error);
