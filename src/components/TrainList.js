@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material';
 
-const TrainList = ({ trains, stationsChanged, resetStationsChanged  }) => {
+const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [timeDiffs, setTimeDiffs] = useState({});
 
@@ -36,21 +36,30 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged  }) => {
   };
 
   return (
-    <Table>
+    <Table size="small">
       <TableHead>
         <TableRow>
           <TableCell>Línea</TableCell>
           <TableCell>Tren</TableCell>
           <TableCell>Hora Salida EST</TableCell>
-          <TableCell>Hora Llegada EST</TableCell>
-          <TableCell>Duración EST</TableCell>
           {selectedRow !== null && (
             <>
               <TableCell>Hora Salida REAL</TableCell>
-              <TableCell>Hora Llegada REAL</TableCell>
-              <TableCell>Duración REAL</TableCell>
             </>
           )}
+          <TableCell>Hora Llegada EST</TableCell>
+          {selectedRow !== null && (
+            <>
+            <TableCell>Hora Llegada REAL</TableCell>
+            </>
+          )}          
+          <TableCell>Duración EST</TableCell>
+          {selectedRow !== null && (
+            <>
+          <TableCell>Duración REAL</TableCell>
+            </>
+          )}          
+        
         </TableRow>
       </TableHead>
       <TableBody>
@@ -73,9 +82,7 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged  }) => {
                 <TableCell>{train.linea}</TableCell>
                 <TableCell>{train.cdgoTren}</TableCell>
                 <TableCell>{train.horaSalida}</TableCell>
-                <TableCell>{train.horaLlegada}</TableCell>
-                <TableCell>{train.duracion}</TableCell>
-                {selectedRow === index && (
+                {selectedRow !== null && (
                   <>
                     <TableCell>
                       {timeRealSalida ? (
@@ -101,7 +108,12 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged  }) => {
                         </Button>
                       )}
                     </TableCell>
-                    <TableCell>
+                  </>
+                )}
+                <TableCell>{train.horaLlegada}</TableCell>
+                {selectedRow !== null && (
+                  <>
+                                        <TableCell>
                       {timeRealLlegada ? (
                         <span>
                           {timeRealLlegada.toLocaleTimeString()} (
@@ -125,13 +137,20 @@ const TrainList = ({ trains, stationsChanged, resetStationsChanged  }) => {
                         </Button>
                       )}
                     </TableCell>
-                    <TableCell>
+                  </>
+                )}
+
+                <TableCell>{train.duracion}</TableCell>
+                {selectedRow !== null && (
+                  <>
+                                        <TableCell>
                       {durationReal ? (
                         <span>{durationReal} min</span>
                       ) : (
                         '-'
                       )}
                     </TableCell>
+
                   </>
                 )}
               </TableRow>
