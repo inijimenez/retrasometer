@@ -51,7 +51,9 @@ const App = () => {
         Versión 1.0
       </Typography>
       {isLoadingStations ? (
-        <div>Cargando datos estaciones...</div>
+        <Typography variant="subtitle1" align="center">
+          Cargando datos estaciones...
+        </Typography>
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
@@ -72,15 +74,15 @@ const App = () => {
           </Grid>
         </Grid>
       )}
-      {isLoadingTrains ? (
-        <div>Cargando datos trayectos...</div>
+      {isLoadingTrains ? (                
+          <Typography variant="subtitle1" align="center">
+            Cargando datos trayectos...
+          </Typography>
       ) : (
         trains.length > 0 ? (
           <TrainList trains={trains} stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)} />
         ) : (
-          <Typography variant="subtitle1" align="center">
-            No se ha encontrado ningún tren.
-          </Typography>
+        <div></div>
         )
       )}
     </Container>
