@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid} from '@mui/material';
+import { Container, Typography, Grid } from '@mui/material';
 import StationSelect from './components/StationSelect';
 import TrainList from './components/TrainList';
 import { fetchStations, fetchTrains } from './api/renfeApi';
@@ -11,6 +11,7 @@ const App = () => {
   const [destinationStation, setDestinationStation] = useState(null);
   const [trains, setTrains] = useState([]);
   const [stationsChanged, setStationsChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loadStations = async () => {
@@ -23,15 +24,17 @@ const App = () => {
   useEffect(() => {
     const loadTrains = async () => {
       if (originStation && destinationStation) {
-        console.log("Antes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
+        setIsLoading(true); // Establecer isLoading en true antes de la llamada a la API
+        //console.log("Antes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
         const fetchedTrains = await fetchTrains(originStation, destinationStation);
-        console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);        
+        //console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);        
         setTrains(fetchedTrains);
+        setIsLoading(false); // Establecer isLoading en false despues de la llamada a la API
       }
     };
     loadTrains();
   }, [originStation, destinationStation]);
-  
+
   useEffect(() => {
     setStationsChanged(true);
   }, [originStation, destinationStation]);
@@ -44,7 +47,7 @@ const App = () => {
       <Typography variant="h6" align="center">
         Versión 1.0
       </Typography>
-    
+
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <StationSelect
@@ -63,12 +66,18 @@ const App = () => {
           />
         </Grid>
       </Grid>
-      {trains.length > 0 ? (
-        <TrainList trains={trains}  stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)}/>
+      {isLoading ? (
+        <div>Cargando datos...</div>
       ) : (
-        <Typography variant="subtitle1" align="center">
-          No se ha encontrado ningún tren.
-        </Typography>
+        {
+          trains.length > 0 ? (
+            <TrainList trains={trains} stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)} />
+          ) : (
+            <Typography variant="subtitle1" align="center">
+              No se ha encontrado ningún tren.
+            </Typography>
+          )
+        }
       )}
     </Container>
   );
