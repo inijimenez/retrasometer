@@ -22,11 +22,11 @@ const TrainList = ({ trains }) => {
   const [timeDiffs, setTimeDiffs] = useState({});
 
   const handleRowClick = (index) => {
-    console.log("PASO A handleRowClick:" + index);
+    console.log("PASO A1 handleRowClick:" + index);
     setSelectedTrainIndex(index);
-    console.log("PASO B handleRowClick:"+ index);
+    console.log("PASO B1 handleRowClick:"+ index);
     setTimeDiffs(null);
-    console.log("PASO C setTimeDiffs null");
+    console.log("PASO C1 setTimeDiffs null");
   };
 
   const updateTimeDiffs = (diffs) => {
