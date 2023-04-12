@@ -43,7 +43,9 @@ const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) =>
     updateTimeDiffs({ ...timeDiffs, end: diff });
   };
 
+  console.log("PASO A durationReal");
   const durationReal = (timeDiffs && timeDiffs.start && timeDiffs.end) ? timeDiffs.end - timeDiffs.start : null;
+  console.log("PASO b durationReal:" + durationReal);
 
   return (
     <TableRow onClick={onClick} selected={isSelected}>
