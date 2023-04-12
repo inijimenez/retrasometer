@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import TrainList from './components/TrainList';
 import StationSelect from './components/StationSelect';
-import renfeAPI from './services/renfeAPI';
+import renfeAPI from './services/renfeAPI2';
 
 function App() {
   const [stations, setStations] = useState([]);
