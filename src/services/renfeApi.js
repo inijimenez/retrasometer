@@ -81,9 +81,9 @@ export async function fetchTrains(origin, destination) {
 }
 
 
-const renfeApi = {
+const renfeAPI = {
   fetchStations,
   fetchTrains,
 };
 
-export default renfeApi;
+export default renfeAPI;
