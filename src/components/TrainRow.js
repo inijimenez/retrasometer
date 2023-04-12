@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
-import {
-  TableRow,
-  TableCell,
-  makeStyles,
-  Button,
-} from '@mui/material';
+import { TableRow, TableCell, Button } from '@mui/material';
+import { styled } from '@mui/system';
 
-const useStyles = makeStyles((theme) => ({
-  redText: {
-    color: 'red',
-  },
-  greenText: {
-    color: 'green',
-  },
-}));
+const RedText = styled('span')({
+  color: 'red',
+});
+
+const GreenText = styled('span')({
+  color: 'green',
+});
 
 const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) => {
-  const classes = useStyles();
   const [startTimeReal, setStartTimeReal] = useState(null);
   const [endTimeReal, setEndTimeReal] = useState(null);
 
@@ -74,9 +68,11 @@ const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) =>
       <TableCell>{train.duracion}</TableCell>
       <TableCell>
         {isSelected && durationReal !== null ? (
-          <span className={durationReal > 0 ? classes.redText : classes.greenText}>
-            {durationReal > 0 ? '+' : ''}{durationReal} min
-          </span>
+          durationReal > 0 ? (
+            <RedText>{durationReal > 0 ? '+' : ''}{durationReal} min</RedText>
+          ) : (
+            <GreenText>{durationReal > 0 ? '+' : ''}{durationReal} min</GreenText>
+          )
         ) : null}
       </TableCell>
     </TableRow>
