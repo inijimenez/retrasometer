@@ -26,10 +26,14 @@ const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) =>
   };
 
   const handleUpdateStartTimeReal = () => {
+    console.log("INICIO handleUpdateStartTimeReal");
     const currentTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     setStartTimeReal(currentTime);
+    console.log("FIN a handleUpdateStartTimeReal");
     const diff = getDifference(train.horaSalida, currentTime);
+    console.log("FIN B handleUpdateStartTimeReal");
     updateTimeDiffs({ ...timeDiffs, start: diff });
+    console.log("FIN  handleUpdateStartTimeReal");
   };
 
   const handleUpdateEndTimeReal = () => {
