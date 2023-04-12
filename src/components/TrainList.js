@@ -27,7 +27,9 @@ const TrainList = ({ trains }) => {
   };
 
   const updateTimeDiffs = (diffs) => {
+    console.log("PASO A updateTimeDiffs");
     setTimeDiffs(diffs);
+    console.log("PASO B updateTimeDiffs");
   };
 
   return (
