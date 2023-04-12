@@ -31,7 +31,7 @@ const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) =>
     setStartTimeReal(currentTime);
     console.log("FIN a handleUpdateStartTimeReal");
     const diff = getDifference(train.horaSalida, currentTime);
-    console.log("FIN B handleUpdateStartTimeReal");
+    console.log("FIN B handleUpdateStartTimeReal:" + diff);
     updateTimeDiffs({ ...timeDiffs, start: diff });
     console.log("FIN  handleUpdateStartTimeReal");
   };
