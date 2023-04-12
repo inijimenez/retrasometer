@@ -1,90 +1,73 @@
 import React, { useState } from 'react';
-import { TableRow, TableCell, Button } from '@mui/material';
+import { TableCell, TableRow, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
-const RedText = styled('span')({
-  color: 'red',
-});
+const DelayCell = styled(TableCell)(({ theme, delay }) => ({
+  color: delay > 0 ? theme.palette.error.main : theme.palette.success.main,
+}));
 
-const GreenText = styled('span')({
-  color: 'green',
-});
-
-const TrainRow = ({ train, onClick, isSelected, timeDiffs, updateTimeDiffs }) => {
+function TrainRow({ train }) {
+  const [selected, setSelected] = useState(false);
   const [startTimeReal, setStartTimeReal] = useState(null);
   const [endTimeReal, setEndTimeReal] = useState(null);
 
-  const getDifference = (time1, time2) => {
-    const [h1, m1] = time1.split(':');
-    const [h2, m2] = time2.split(':');
-    const date1 = new Date();
-    date1.setHours(h1, m1, 0, 0);
-    const date2 = new Date();
-    date2.setHours(h2, m2, 0, 0);
-    const diff = (date2.getTime() - date1.getTime()) / (1000 * 60);
+  const updateStartTimeReal = () => {
+    setStartTimeReal(new Date());
+    setSelected(true);
+  };
+
+  const updateEndTimeReal = () => {
+    setEndTimeReal(new Date());
+  };
+
+  const delayInMinutes = (timeReal, timeExpected) => {
+    if (!timeReal) return null;
+    const diff = Math.floor((timeReal - new Date(`1970-01-01T${timeExpected}`)) / 60000);
     return diff;
   };
 
-  const handleUpdateStartTimeReal = () => {
-    console.log("INICIO handleUpdateStartTimeReal");
-    const currentTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    setStartTimeReal(currentTime);
-    console.log("FIN a handleUpdateStartTimeReal");
-    const diff = getDifference(train.horaSalida, currentTime);
-    console.log("FIN B handleUpdateStartTimeReal:" + diff);
-    updateTimeDiffs({ ...timeDiffs, start: diff });
-    console.log("FIN  handleUpdateStartTimeReal");
-  };
+  const startTimeDelay = delayInMinutes(startTimeReal, train.horaSalida);
+  const endTimeDelay = delayInMinutes(endTimeReal, train.horaLlegada);
 
-  const handleUpdateEndTimeReal = () => {
-    const currentTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    setEndTimeReal(currentTime);
-    const diff = getDifference(train.horaLlegada, currentTime);
-    updateTimeDiffs({ ...timeDiffs, end: diff });
-  };
-
-  console.log("PASO A durationReal");
-  const durationReal = (timeDiffs && timeDiffs.start && timeDiffs.end) ? timeDiffs.end - timeDiffs.start : null;
-  console.log("PASO b durationReal:" + durationReal);
-  console.log("startTimeReal:" + startTimeReal);
-  
   return (
-    <TableRow onClick={onClick} selected={isSelected}>
+    <TableRow onClick={() => setSelected(!selected)}>
       <TableCell>{train.linea}</TableCell>
       <TableCell>{train.cdgoTren}</TableCell>
       <TableCell>{train.horaSalida}</TableCell>
-      <TableCell>
-        {isSelected && startTimeReal ? (
-          <span>
-            
-            {startTimeReal} ({timeDiffs.start > 0 ? '+' : ''}{timeDiffs.start} min)
-          </span>
-        ) : (
-          isSelected && <Button onClick={handleUpdateStartTimeReal}>Actualizar Hora</Button>
-        )}
-      </TableCell>
-      <TableCell>{train.horaLlegada}</TableCell>
-      <TableCell>
-        {isSelected && endTimeReal ? (
-          <span>
-            {endTimeReal} ({timeDiffs.end > 0 ? '+' : ''}{timeDiffs.end} min)
-          </span>
-        ) : (
-          isSelected && <Button onClick={handleUpdateEndTimeReal}>Actualizar Hora</Button>
-        )}
-      </TableCell>
-      <TableCell>{train.duracion}</TableCell>
-      <TableCell>
-        {isSelected && durationReal !== null ? (
-          durationReal > 0 ? (
-            <RedText>{durationReal > 0 ? '+' : ''}{durationReal} min</RedText>
-          ) : (
-            <GreenText>{durationReal > 0 ? '+' : ''}{durationReal} min</GreenText>
-          )
-        ) : null}
-      </TableCell>
+      {selected && (
+        <>
+          <DelayCell delay={startTimeDelay}>{startTimeReal?.toLocaleTimeString()}</DelayCell>
+          <DelayCell delay={startTimeDelay}>{startTimeDelay} min</DelayCell>
+          <TableCell>
+            {startTimeReal ? (
+              <Button variant="outlined" color="primary" onClick={updateStartTimeReal}>
+                Actualizar Hora
+              </Button>
+            ) : (
+              startTimeDelay
+            )}
+          </TableCell>
+          <TableCell>{train.horaLlegada}</TableCell>
+          <DelayCell delay={endTimeDelay}>{endTimeReal?.toLocaleTimeString()}</DelayCell>
+          <DelayCell delay={endTimeDelay}>{endTimeDelay} min</DelayCell>
+          <TableCell>
+            {endTimeReal ? (
+              <Button variant="outlined" color="primary" onClick={updateEndTimeReal}>
+                Actualizar Hora
+              </Button>
+            ) : (
+              endTimeDelay
+            )}
+          </TableCell>
+          <DelayCell delay={endTimeDelay - startTimeDelay}>
+            {endTimeDelay !== null && startTimeDelay !== null
+              ? endTimeDelay - startTimeDelay
+              : '-'} min
+          </DelayCell>
+        </>
+      )}
     </TableRow>
   );
-};
+}
 
 export default TrainRow;

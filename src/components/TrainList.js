@@ -1,70 +1,45 @@
-import React, { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from '@mui/material';
-import { styled } from '@mui/system';
+import { useState, useEffect } from 'react';
+import renfeAPI from '../services/renfeAPI';
 import TrainRow from './TrainRow';
 
-const StyledTableHeadCell = styled(TableCell)({
-  fontWeight: 'bold',
-  whiteSpace: 'nowrap',
-  verticalAlign: 'middle',
-});
+function TrainList({ originCode, destinationCode }) {
+  const [trains, setTrains] = useState([]);
+  const [loadingTrains, setLoadingTrains] = useState(true);
 
-const TrainList = ({ trains }) => {
-  const [selectedTrainIndex, setSelectedTrainIndex] = useState(null);
-  const [timeDiffs, setTimeDiffs] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const trainData = await renfeAPI.fetchTrains(originCode, destinationCode);
+        setTrains(trainData);
+        setLoadingTrains(false);
+      } catch (err) {
+        console.error(err);
+        setLoadingTrains(false);
+      }
+    };
+    fetchData();
+  }, [originCode, destinationCode]);
 
-  const handleRowClick = (index) => {
-    console.log("PASO A1 handleRowClick:" + index);
-    setSelectedTrainIndex(index);
-    console.log("PASO B1 handleRowClick:"+ index);
-    setTimeDiffs(null);
-    console.log("PASO C1 setTimeDiffs null");
-  };
-
-  const updateTimeDiffs = (diffs) => {
-    console.log("PASO A updateTimeDiffs");
-    setTimeDiffs(diffs);
-    console.log("PASO B updateTimeDiffs");
+  const handleTrainSelected = (trainId) => {
+    setTrains((prevTrains) =>
+      prevTrains.map((train) =>
+        train.cdgoTren === trainId ? { ...train, selected: !train.selected } : train
+      )
+    );
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="train list">
-        <TableHead>
-          <TableRow>
-            <StyledTableHeadCell>Línea</StyledTableHeadCell>
-            <StyledTableHeadCell>Tren</StyledTableHeadCell>
-            <StyledTableHeadCell>HoraSalidaEST</StyledTableHeadCell>
-            <StyledTableHeadCell>HoraSalidaREAL</StyledTableHeadCell>
-            <StyledTableHeadCell>HoraLlegadaEST</StyledTableHeadCell>
-            <StyledTableHeadCell>HoraLlegadaREAL</StyledTableHeadCell>
-            <StyledTableHeadCell>DuracionEST</StyledTableHeadCell>
-            <StyledTableHeadCell>DuracionREAL</StyledTableHeadCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {trains.map((train, index) => (
-            <TrainRow
-              key={train.cdgoTren}
-              train={train}
-              onClick={() => handleRowClick(index)}
-              isSelected={selectedTrainIndex === index}
-              timeDiffs={selectedTrainIndex === index ? timeDiffs : null}
-              updateTimeDiffs={updateTimeDiffs}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      <h3>Trayectos</h3>
+      {loadingTrains ? (
+        <p>Cargando trayectos...</p>
+      ) : (
+        trains.map((train) => (
+          <TrainRow key={train.cdgoTren} train={train} onTrainSelected={handleTrainSelected} />
+        ))
+      )}
+    </div>
   );
-};
+}
 
 export default TrainList;
