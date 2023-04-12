@@ -1,90 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableContainer,
   Paper,
-  makeStyles,
 } from '@mui/material';
+import { styled } from '@mui/system';
 import TrainRow from './TrainRow';
 
-const useStyles = makeStyles((theme) => ({
-  headerText: {
-    writingMode: 'vertical-rl',
-    textOrientation: 'mixed',
-    fontWeight: 'bold',
-    whiteSpace: 'nowrap',
-  },
-  tableContainer: {
-    maxHeight: 400,
-    overflowX: 'auto',
-  },
-}));
+const StyledTableHeadCell = styled(TableCell)({
+  fontWeight: 'bold',
+  whiteSpace: 'nowrap',
+  verticalAlign: 'middle',
+});
 
-const TrainList = ({ trains, stationsChanged, resetStationsChanged }) => {
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [timeDiffs, setTimeDiffs] = useState({});
-  const classes = useStyles();
-
-  useEffect(() => {
-    if (stationsChanged) {
-      setSelectedRow(null);
-      setTimeDiffs({});
-      resetStationsChanged();
-    }
-  }, [stationsChanged, resetStationsChanged]);
+const TrainList = ({ trains }) => {
+  const [selectedTrainIndex, setSelectedTrainIndex] = useState(null);
+  const [timeDiffs, setTimeDiffs] = useState(null);
 
   const handleRowClick = (index) => {
-    if (selectedRow === index) {
-      setSelectedRow(null);
-    } else {
-      setSelectedRow(index);
-    }
+    setSelectedTrainIndex(index);
+    setTimeDiffs(null);
   };
 
-  const updateRowTimeDiffs = (index, newDiffs) => {
-    setTimeDiffs({ ...timeDiffs, [index]: newDiffs });
+  const updateTimeDiffs = (diffs) => {
+    setTimeDiffs(diffs);
   };
 
   return (
-    <TableContainer className={classes.tableContainer} component={Paper}>
-      <Table stickyHeader>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="train list">
         <TableHead>
           <TableRow>
-            <TableCell className={classes.headerText}>Línea</TableCell>
-            <TableCell className={classes.headerText}>Tren</TableCell>
-            <TableCell className={classes.headerText}>
-              Hora Salida EST
-            </TableCell>
-            <TableCell className={classes.headerText}>
-              Hora Salida REAL
-            </TableCell>
-            <TableCell className={classes.headerText}>
-              Hora Llegada EST
-            </TableCell>
-            <TableCell className={classes.headerText}>
-              Hora Llegada REAL
-            </TableCell>
-            <TableCell className={classes.headerText}>
-              Duracion EST
-            </TableCell>
-            <TableCell className={classes.headerText}>
-              Duracion REAL
-            </TableCell>
+            <StyledTableHeadCell>Línea</StyledTableHeadCell>
+            <StyledTableHeadCell>Tren</StyledTableHeadCell>
+            <StyledTableHeadCell>HoraSalidaEST</StyledTableHeadCell>
+            <StyledTableHeadCell>HoraSalidaREAL</StyledTableHeadCell>
+            <StyledTableHeadCell>HoraLlegadaEST</StyledTableHeadCell>
+            <StyledTableHeadCell>HoraLlegadaREAL</StyledTableHeadCell>
+            <StyledTableHeadCell>DuracionEST</StyledTableHeadCell>
+            <StyledTableHeadCell>DuracionREAL</StyledTableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {trains.map((train, index) => (
             <TrainRow
-              key={index}
+              key={train.cdgoTren}
               train={train}
               onClick={() => handleRowClick(index)}
-              isSelected={selectedRow === index}
-              timeDiffs={timeDiffs[index]}
-              updateTimeDiffs={(newDiffs) => updateRowTimeDiffs(index, newDiffs)}
+              isSelected={selectedTrainIndex === index}
+              timeDiffs={selectedTrainIndex === index ? timeDiffs : null}
+              updateTimeDiffs={updateTimeDiffs}
             />
           ))}
         </TableBody>
