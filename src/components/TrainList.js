@@ -19,7 +19,7 @@ const StyledTableHeadCell = styled(TableCell)({
 
 const TrainList = ({ trains }) => {
   const [selectedTrainIndex, setSelectedTrainIndex] = useState(null);
-  const [timeDiffs, setTimeDiffs] = useState(null);
+  const [timeDiffs, setTimeDiffs] = useState({});
 
   const handleRowClick = (index) => {
     setSelectedTrainIndex(index);
