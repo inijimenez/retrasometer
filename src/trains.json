@@ -1,0 +1,130 @@
+[
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27927",
+        "horaSalida": "11:05",
+        "horaLlegada": "11:28",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21223",
+        "horaSalida": "11:21",
+        "horaLlegada": "11:43",
+        "duracion": "22min.",
+        "accesible": false
+    },
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27929",
+        "horaSalida": "11:35",
+        "horaLlegada": "11:58",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21225",
+        "horaSalida": "11:51",
+        "horaLlegada": "12:13",
+        "duracion": "22min.",
+        "accesible": false
+    },
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27931",
+        "horaSalida": "12:05",
+        "horaSalidaReal": "12:05",
+        "horaLlegada": "12:28",
+        "horaLlegadaReal": "12:28",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21227",
+        "horaSalida": "12:19",
+        "horaSalidaReal": "12:19",
+        "horaLlegada": "12:41",
+        "horaLlegadaReal": "12:41",
+        "duracion": "22min.",
+        "accesible": false
+    },
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27933",
+        "horaSalida": "12:35",
+        "horaSalidaReal": "12:35",
+        "horaLlegada": "12:58",
+        "horaLlegadaReal": "12:58",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21229",
+        "horaSalida": "12:51",
+        "horaSalidaReal": "12:51",
+        "horaLlegada": "13:13",
+        "horaLlegadaReal": "13:13",
+        "duracion": "22min.",
+        "accesible": false
+    },
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27935",
+        "horaSalida": "13:06",
+        "horaLlegada": "13:29",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21231",
+        "horaSalida": "13:21",
+        "horaLlegada": "13:43",
+        "duracion": "22min.",
+        "accesible": false
+    },
+    {
+        "linea": "C1",
+        "lineaEstOrigen": "C1",
+        "lineaEstDestino": "C1",
+        "cdgoTren": "27937",
+        "horaSalida": "13:35",
+        "horaLlegada": "13:58",
+        "duracion": "23min.",
+        "accesible": false
+    },
+    {
+        "linea": "C10",
+        "lineaEstOrigen": "C10",
+        "lineaEstDestino": "C10",
+        "cdgoTren": "21233",
+        "horaSalida": "13:50",
+        "horaLlegada": "14:12",
+        "duracion": "22min.",
+        "accesible": false
+    }
+]

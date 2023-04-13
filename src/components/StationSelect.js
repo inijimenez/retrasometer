@@ -1,25 +1,22 @@
-import { TextField } from '@mui/material';
+import React from 'react';
+import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
 
-function StationSelect({ stations, onChange }) {
-  const handleSelectChange = (event, values) => {
-    const origin = values[0] ? values[0].CÓDIGO : null;
-    const destination = values[1] ? values[1].CÓDIGO : null;
-    onChange(origin, destination);
-  };
-
+const StationSelect = ({ stations, label, value, onChange }) => {
   return (
+    <Box>
     <Autocomplete
-      multiple
-      limitTags={2}
+      value={value}
+      onChange={(event, newValue) => {
+        onChange(newValue);
+      }}
       options={stations}
-      getOptionLabel={(option) => option.DENOMINACION}
-      renderInput={(params) => (
-        <TextField {...params} variant="outlined" label="Estaciones" />
-      )}
-      onChange={handleSelectChange}
+      getOptionLabel={(option) => option.DESCRIPCION}
+      renderInput={(params) => <TextField {...params} label={label} />}
     />
+    </Box>
   );
-}
+};
 
 export default StationSelect;

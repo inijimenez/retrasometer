@@ -1,0 +1,28 @@
+[
+    {
+        "_id": 27,
+        "CÓDIGO": 98305,
+        "DESCRIPCION": "AEROPUERTO T-4",
+        "LATITUD": "40,491691",
+        "LONGITUD": "-3,593988",
+        "DIRECCIÓN": "CARRETERA M-12 - TERMINAL AEROPUERTO T4 - BARAJAS",
+        "C.P.": 28042,
+        "POBLACION": "Madrid",
+        "PROVINCIA": "Madrid",
+        "Fichas": "https://data.renfe.com/files/estaciones/FichaEstacion98305.pdf",
+        "Túneles lavado": ""
+    },
+    {
+        "_id": 70,
+        "CÓDIGO": 70103,
+        "DESCRIPCION": "ALCALA DE HENARES",
+        "LATITUD": "40,488976",
+        "LONGITUD": "-3,3664702",
+        "DIRECCIÓN": "PASEO ESTACION FERROCARRIL, S/N",
+        "C.P.": 28807,
+        "POBLACION": "Alcalá de Henares",
+        "PROVINCIA": "Madrid",
+        "Fichas": "https://data.renfe.com/files/estaciones/FichaEstacion70103.pdf",
+        "Túneles lavado": ""
+    }
+]

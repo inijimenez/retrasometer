@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import renfeAPI from '../services/renfeAPI2';
+import renfeAPI from '../services/renfeAPI';
 import TrainRow from './TrainRow';
 
 function TrainList({ originCode, destinationCode }) {

@@ -1,47 +1,103 @@
-import { useState, useEffect } from 'react';
-import TrainList from './components/TrainList';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Grid } from '@mui/material';
 import StationSelect from './components/StationSelect';
-import renfeAPI from './services/renfeAPI2';
+import TrainList from './components/TrainList';
+import { fetchStations, fetchTrains } from './services/renfeAPI';
+import localStations from './stations.json';
+import localTrains from './trains.json';
 
-function App() {
+
+const App = () => {
   const [stations, setStations] = useState([]);
-  const [originCode, setOriginCode] = useState(null);
-  const [destinationCode, setDestinationCode] = useState(null);
-  const [loadingStations, setLoadingStations] = useState(true);
+  const [originStation, setOriginStation] = useState(null);
+  const [destinationStation, setDestinationStation] = useState(null);
+  const [trains, setTrains] = useState([]);
+  const [stationsChanged, setStationsChanged] = useState(false);
+  const [isLoadingStations, setIsLoadingStations] = useState(false);
+  const [isLoadingTrains, setIsLoadingTrains] = useState(false);
+
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const stationData = await renfeAPI.fetchStations();
-        setStations(stationData);
-        setLoadingStations(false);
-      } catch (err) {
-        console.error(err);
-        setLoadingStations(false);
-      }
+    if (process.env.NODE_ENV === 'development') {      
+      console.log("Inicializo datos DEBUG")
+      const miLocalStation = {localStations};
+      const miLocalTrain = {localTrains};
+      localStorage.setItem("stations", JSON.stringify(miLocalStation.localStations));
+      localStorage.setItem("trains", JSON.stringify(miLocalTrain.localTrains));
+    }
+    const loadStations = async () => {
+      setIsLoadingStations(true); // Establecer isLoading en true antes de la llamada a la API
+      const fetchedStations = await fetchStations();
+      setStations(fetchedStations);
+      setIsLoadingStations(false); // Establecer isLoading en false antes de la llamada a la API
     };
-    fetchData();
+    loadStations();
   }, []);
 
-  const handleStationChange = (origin, destination) => {
-    setOriginCode(origin);
-    setDestinationCode(destination);
-  };
+  useEffect(() => {
+    const loadTrains = async () => {
+      if (originStation && destinationStation) {
+        setIsLoadingTrains(true); // Establecer isLoading en true antes de la llamada a la API
+        //console.log("Antes loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);
+        const fetchedTrains = await fetchTrains(originStation, destinationStation);
+        //console.log("Después loadTrains:" + originStation.CÓDIGO + "," + destinationStation.CÓDIGO);        
+        setTrains(fetchedTrains);
+        setIsLoadingTrains(false); // Establecer isLoading en false despues de la llamada a la API
+      }
+    };
+    loadTrains();
+  }, [originStation, destinationStation]);
+
+  useEffect(() => {
+    setStationsChanged(true);
+  }, [originStation, destinationStation]);
 
   return (
-    <div>
-      <h1>Retrasometer</h1>
-      <h2>Versión 1.0.0</h2>
-      {loadingStations ? (
-        <p>Cargando estaciones...</p>
+    <Container>
+      <Typography variant="h4" align="center">
+        TEST
+      </Typography>
+      <Typography variant="h6" align="center">
+        Versión 1.0
+      </Typography>
+      {isLoadingStations ? (
+        <Typography variant="subtitle1" align="center">
+          Cargando datos estaciones...
+        </Typography>
       ) : (
-        <StationSelect stations={stations} onChange={handleStationChange} />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <StationSelect
+              stations={stations}
+              label="Estación de origen"
+              value={originStation}
+              onChange={setOriginStation}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <StationSelect
+              stations={stations}
+              label="Estación de destino"
+              value={destinationStation}
+              onChange={setDestinationStation}
+            />
+          </Grid>
+        </Grid>
       )}
-      {originCode && destinationCode && (
-        <TrainList originCode={originCode} destinationCode={destinationCode} />
+      {isLoadingTrains ? (                
+          <Typography variant="subtitle1" align="center">
+            Cargando datos trayectos...
+          </Typography>
+      ) : (
+        trains.length > 0 ? (
+          <TrainList trains={trains} stationsChanged={stationsChanged} resetStationsChanged={() => setStationsChanged(false)} />
+        ) : (
+        <div></div>
+        )
       )}
-    </div>
+    </Container>
   );
-}
+};
 
 export default App;
