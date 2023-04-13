@@ -1,45 +1,66 @@
-import { useState, useEffect } from 'react';
-import renfeAPI from '../services/renfeAPI';
-import TrainRow from './TrainRow';
+import React, { useEffect, useState } from "react";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { styled } from "@mui/system";
+import TrainRow from "./TrainRow";
+import { getTrains } from "../services/renfeAPI";
 
-function TrainList({ originCode, destinationCode }) {
+const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
+  fontWeight: "bold",
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  whiteSpace: "pre-wrap",
+  textAlign: "center",
+}));
+
+const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
-  const [loadingTrains, setLoadingTrains] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const trainData = await renfeAPI.fetchTrains(originCode, destinationCode);
-        setTrains(trainData);
-        setLoadingTrains(false);
-      } catch (err) {
-        console.error(err);
-        setLoadingTrains(false);
-      }
-    };
-    fetchData();
-  }, [originCode, destinationCode]);
+    if (origin && destination) {
+      setLoading(true);
+      const fetchTrains = async () => {
+        const fetchedTrains = await getTrains(origin.CÓDIGO, destination.CÓDIGO);
+        setTrains(fetchedTrains);
+        setLoading(false);
+      };
+      fetchTrains();
+    } else {
+      setTrains([]);
+    }
+  }, [origin, destination]);
 
-  const handleTrainSelected = (trainId) => {
-    setTrains((prevTrains) =>
-      prevTrains.map((train) =>
-        train.cdgoTren === trainId ? { ...train, selected: !train.selected } : train
-      )
-    );
-  };
+  if (loading) {
+    return <Typography variant="h6">Cargando trayectos...</Typography>;
+  }
+
+  if (trains.length === 0) {
+    return <Typography variant="h6">No se ha encontrado ningún tren.</Typography>;
+  }
 
   return (
-    <div>
-      <h3>Trayectos</h3>
-      {loadingTrains ? (
-        <p>Cargando trayectos...</p>
-      ) : (
-        trains.map((train) => (
-          <TrainRow key={train.cdgoTren} train={train} onTrainSelected={handleTrainSelected} />
-        ))
-      )}
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <CustomTableHeadCell>Línea</CustomTableHeadCell>
+            <CustomTableHeadCell>Tren</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br/>Salida<br/>EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br/>Salida<br/>REAL</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br/>Llegada<br/>EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br/>Llegada<br/>REAL</CustomTableHeadCell>
+            <CustomTableHeadCell>Duración<br/>EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Duración<br/>REAL</CustomTableHeadCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {trains.map((train) => (
+            <TrainRow key={`${train.linea}-${train.cdgoTren}`} train={train} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
-}
+};
 
 export default TrainList;

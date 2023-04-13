@@ -1,73 +1,63 @@
 import React, { useState } from 'react';
-import { TableCell, TableRow, Button } from '@mui/material';
+import { TableRow, TableCell, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
-const DelayCell = styled(TableCell)(({ theme, delay }) => ({
-  color: delay > 0 ? theme.palette.error.main : theme.palette.success.main,
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  whiteSpace: 'pre-wrap',
+  textAlign: 'center',
+  '&:first-of-type': {
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderBottomLeftRadius: theme.shape.borderRadius,
+  },
+  '&:last-of-type': {
+    borderTopRightRadius: theme.shape.borderRadius,
+    borderBottomRightRadius: theme.shape.borderRadius,
+  },
 }));
 
-function TrainRow({ train }) {
+const TrainRow = ({ train }) => {
   const [selected, setSelected] = useState(false);
-  const [startTimeReal, setStartTimeReal] = useState(null);
-  const [endTimeReal, setEndTimeReal] = useState(null);
+  const [realStartUpdated, setRealStartUpdated] = useState(false);
+  const [realEndUpdated, setRealEndUpdated] = useState(false);
 
-  const updateStartTimeReal = () => {
-    setStartTimeReal(new Date());
-    setSelected(true);
+  const handleClick = () => {
+    setSelected(!selected);
   };
 
-  const updateEndTimeReal = () => {
-    setEndTimeReal(new Date());
+  const handleRealStartUpdate = () => {
+    setRealStartUpdated(true);
   };
 
-  const delayInMinutes = (timeReal, timeExpected) => {
-    if (!timeReal) return null;
-    const diff = Math.floor((timeReal - new Date(`1970-01-01T${timeExpected}`)) / 60000);
-    return diff;
+  const handleRealEndUpdate = () => {
+    setRealEndUpdated(true);
   };
 
-  const startTimeDelay = delayInMinutes(startTimeReal, train.horaSalida);
-  const endTimeDelay = delayInMinutes(endTimeReal, train.horaLlegada);
+  const delayInMinutes = train.delay !== null ? Math.floor(train.delay / 60) : null;
 
   return (
-    <TableRow onClick={() => setSelected(!selected)}>
-      <TableCell>{train.linea}</TableCell>
-      <TableCell>{train.cdgoTren}</TableCell>
-      <TableCell>{train.horaSalida}</TableCell>
-      {selected && (
-        <>
-          <DelayCell delay={startTimeDelay}>{startTimeReal?.toLocaleTimeString()}</DelayCell>
-          <DelayCell delay={startTimeDelay}>{startTimeDelay} min</DelayCell>
-          <TableCell>
-            {startTimeReal ? (
-              <Button variant="outlined" color="primary" onClick={updateStartTimeReal}>
-                Actualizar Hora
-              </Button>
-            ) : (
-              startTimeDelay
-            )}
-          </TableCell>
-          <TableCell>{train.horaLlegada}</TableCell>
-          <DelayCell delay={endTimeDelay}>{endTimeReal?.toLocaleTimeString()}</DelayCell>
-          <DelayCell delay={endTimeDelay}>{endTimeDelay} min</DelayCell>
-          <TableCell>
-            {endTimeReal ? (
-              <Button variant="outlined" color="primary" onClick={updateEndTimeReal}>
-                Actualizar Hora
-              </Button>
-            ) : (
-              endTimeDelay
-            )}
-          </TableCell>
-          <DelayCell delay={endTimeDelay - startTimeDelay}>
-            {endTimeDelay !== null && startTimeDelay !== null
-              ? endTimeDelay - startTimeDelay
-              : '-'} min
-          </DelayCell>
-        </>
-      )}
+    <TableRow onClick={handleClick}>
+      <StyledTableCell>{train.linea}</StyledTableCell>
+      <StyledTableCell>{train.cdgoTren}</StyledTableCell>
+      <StyledTableCell>{train.horaSalida}</StyledTableCell>
+      <StyledTableCell>
+        {selected && realStartUpdated ? train.realStart : ''}
+        {selected && !realStartUpdated && (
+          <Button onClick={handleRealStartUpdate}>Actualizar Hora</Button>
+        )}
+      </StyledTableCell>
+      <StyledTableCell>{train.horaLlegada}</StyledTableCell>
+      <StyledTableCell>
+        {selected && realEndUpdated ? train.realEnd : ''}
+        {selected && !realEndUpdated && (
+          <Button onClick={handleRealEndUpdate}>Actualizar Hora</Button>
+        )}
+      </StyledTableCell>
+      <StyledTableCell>{train.duracion}</StyledTableCell>
+      <StyledTableCell style={{ color: delayInMinutes > 0 ? 'red' : 'green' }}>
+        {selected ? `${delayInMinutes} min` : ''}
+      </StyledTableCell>
     </TableRow>
   );
-}
+};
 
 export default TrainRow;

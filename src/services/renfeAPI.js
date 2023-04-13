@@ -9,7 +9,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export async function fetchStations() {
+export async function getStations() {
   try {
     const cachedStations = localStorage.getItem("stations");
 
@@ -40,7 +40,7 @@ export async function fetchStations() {
   return [];
 }
 
-export async function fetchTrains(origin, destination) {
+export async function getTrains(origin, destination) {
 
   const fechaActual = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const horaAnterior = new Date(Date.now() - 3600 * 1000).getHours();
@@ -82,8 +82,8 @@ export async function fetchTrains(origin, destination) {
 
 
 const renfeAPI = {
-  fetchStations,
-  fetchTrains,
+  getStations,
+  getTrains,
 };
 
 export default renfeAPI;
