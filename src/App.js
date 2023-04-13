@@ -3,7 +3,7 @@ import { Container, Typography, Grid } from "@mui/material";
 import StationSelect from "./components/StationSelect";
 import TrainList from "./components/TrainList";
 import localStations from './stations.json';
-import localTrains from './trains.json';
+//import localTrains from './trains.json';
 
 const App = () => {
   const [origin, setOrigin] = useState(null);
@@ -21,9 +21,9 @@ const App = () => {
     if (process.env.NODE_ENV === 'development') {      
       console.log("Inicializo datos DEBUG")
       const miLocalStation = {localStations};
-      const miLocalTrain = {localTrains};
+      //const miLocalTrain = {localTrains};
       localStorage.setItem("stations", JSON.stringify(miLocalStation.localStations));
-      localStorage.setItem("trains", JSON.stringify(miLocalTrain.localTrains));
+      //localStorage.setItem("trains", JSON.stringify(miLocalTrain.localTrains));
     }
   }, []);
   return (

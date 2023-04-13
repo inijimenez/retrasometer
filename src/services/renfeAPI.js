@@ -69,7 +69,7 @@ export async function getTrains(origin, destination) {
     if (response.data) {
       if (response.data.horario)
       {
-        localStorage.setItem("trains", JSON.stringify(response.data.horario));
+        //localStorage.setItem("trains", JSON.stringify(response.data.horario));
         return response.data.horario;
       }
     }
