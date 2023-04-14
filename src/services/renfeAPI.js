@@ -47,11 +47,11 @@ export async function getTrains(origin, destination) {
   const horaSiguiente = new Date(Date.now() + 3600 * 1000).getHours();
 
   try {
-    const cachedTrains = localStorage.getItem("trains");
-
-    if (cachedTrains) {
-      return JSON.parse(cachedTrains);
-    }
+    //const cachedTrains = localStorage.getItem("trains");
+//
+//if (cachedTrains) {
+//      return JSON.parse(cachedTrains);
+//    }
     const response = await axios.post(HORARIOS_BASE_URL, {
       nucleo: '10',
       origen: origin.CÓDIGO,
