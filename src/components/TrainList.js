@@ -15,12 +15,16 @@ const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
-  const handleRowClick = (index) => {
-    setSelectedRowIndex(index);
+  const [selectedTrainId, setSelectedTrainId] = useState(null);
+
+  const handleRowSelect = (id) => {
+    setSelectedTrainId(selectedTrainId === id ? null : id);
   };
 
+  const handleTimeUpdate = (id, type, newTime) => {
+    console.log(`Train ${id} ${type} time updated to ${newTime}`);
+  };
 
   useEffect(() => {
     if (origin && destination) {
@@ -61,14 +65,20 @@ const TrainList = ({ origin, destination }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {trains.map((train, index) => (
-            <TrainRow
-              key={`${train.linea}-${train.cdgoTren}`}
-              train={train}
-              isSelected={selectedRowIndex === index}
-              onRowClick={() => handleRowClick(index)}
-            />
-          ))}
+        {trains.map((train) => {
+            if (selectedTrainId === null || selectedTrainId === train.cdg) {
+              return (
+                <TrainRow
+                  key={train.cdgoTren}
+                  train={train}
+                  isSelected={selectedTrainId === train.cdgoTren}
+                  onRowSelect={handleRowSelect}
+                  onTimeUpdate={handleTimeUpdate}
+                />
+              );
+            }
+            return null;
+          })}
         </TableBody>
       </Table>
     </TableContainer>

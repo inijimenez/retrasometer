@@ -15,7 +15,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const TrainRow = ({ train, isSelected, onRowClick }) => {
+const TrainRow = ({ train, isSelected, onRowSelect }) => {
   const [realStart, setRealStart] = useState(null);
   const [realEnd, setRealEnd] = useState(null);
 
@@ -65,7 +65,10 @@ const TrainRow = ({ train, isSelected, onRowClick }) => {
   };
 
   return (
-    <TableRow onClick={onRowClick} style={{ display: isSelected ? 'table-row' : 'none' }}>
+    <TableRow  hover
+    key={`${train.linea}-${train.cdgoTren}`}   
+    onClick={() => onRowSelect(train.cdgoTren)}
+    style={{ display: isSelected ? "table-row" : "none" }}>
       <StyledTableCell>{train.linea}</StyledTableCell>
       <StyledTableCell>{train.cdgoTren}</StyledTableCell>
       <StyledTableCell>{train.horaSalida}</StyledTableCell>
