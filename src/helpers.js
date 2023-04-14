@@ -1,5 +1,5 @@
 // Helper function to calculate difference in minutes between two Date objects
-export const calculateDifferenceInMinutes = (date1, date2) => {
+export const getDifferenceInMinutes = (date1, date2) => {
     const diffInMs = Math.abs(date2 - date1);
     return Math.floor(diffInMs / (1000 * 60));
   };

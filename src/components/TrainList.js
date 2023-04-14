@@ -57,22 +57,23 @@ const TrainList = ({ origin, destination }) => {
             <CustomTableHeadCell>Línea</CustomTableHeadCell>
             <CustomTableHeadCell>Tren</CustomTableHeadCell>
             <CustomTableHeadCell>Hora<br />Salida<br />EST</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br />Salida<br />REAL</CustomTableHeadCell>
+             <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Salida<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Hora<br />Llegada<br />EST</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
+            <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Duración<br />EST</CustomTableHeadCell>
+            <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody>
-        {trains.map((train) => {
-            if (selectedTrainId === null || selectedTrainId === train.cdg) {
+          {trains.map((train) => {
+            if (selectedTrainId === null || selectedTrainId === train.cdgoTren) {
               return (
                 <TrainRow
                   key={train.cdgoTren}
                   train={train}
                   isSelected={selectedTrainId === train.cdgoTren}
-                  onRowSelect={handleRowSelect}
+                  onRowClick={handleRowSelect}
                   onTimeUpdate={handleTimeUpdate}
                 />
               );
