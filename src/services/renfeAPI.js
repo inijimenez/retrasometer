@@ -54,7 +54,7 @@ export async function getTrains(origin, destination) {
     if (cachedTrains) {
       return JSON.parse(cachedTrains);
     }
-    const response = await axios.post(HORARIOS_BASE_URL, {
+    const params = {
       nucleo: '10',
       origen: origin.CÓDIGO,
       destino: destination.CÓDIGO,
@@ -65,7 +65,9 @@ export async function getTrains(origin, destination) {
       horaViajeOrigen: horaAnterior,
       horaViajeLlegada: horaSiguiente,
       accesibilidadTrenes: true,
-    },
+    };
+
+    const response = await axios.post(HORARIOS_BASE_URL, params,
       { headers });
 
     if (response.data) {
@@ -75,7 +77,8 @@ export async function getTrains(origin, destination) {
         return response.data.horario;
       }
     }
-    console.log("Paso D - getTrains");
+    console.log("Paso D1 - getTrains: " +  JSON.stringify(params));
+    console.log("Paso D2 - getTrains: " +  JSON.stringify(response));
   } catch (error) {
     console.log("Paso E - getTrains");
     console.error('Error fetching trains:', error);
