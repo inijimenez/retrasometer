@@ -77,6 +77,8 @@ export async function getTrains(origin, destination) {
         return response.data.horario;
       }
     }
+    console.log("Paso D0 - origin: " +  JSON.stringify(origin));
+    console.log("Paso D0 - destination: " +  JSON.stringify(destination));
     console.log("Paso D1 - getTrains: " +  JSON.stringify(params));
     console.log("Paso D2 - getTrains: " +  JSON.stringify(response));
   } catch (error) {

@@ -20,6 +20,7 @@ const TrainList = ({ origin, destination }) => {
     if (origin && destination) {
       setLoading(true);
       const fetchTrains = async () => {
+        console.log("GET TRAINS ORIGIN:" + JSON.stringify(origin));
         const fetchedTrains = await getTrains(origin.CÓDIGO, destination.CÓDIGO);
         setTrains(fetchedTrains);
         setLoading(false);
