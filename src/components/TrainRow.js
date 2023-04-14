@@ -15,15 +15,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const TrainRow = ({ train }) => {
-  const [selected, setSelected] = useState(false);
+const TrainRow = ({ train, isSelected, onRowClick }) => {
   const [realStart, setRealStart] = useState(null);
   const [realEnd, setRealEnd] = useState(null);
 
-  const handleClick = () => {
-    setSelected(!selected);
-  };
-
+  
   const handleUpdateRealStart = () => {
     setRealStart(new Date());
   };
@@ -42,7 +38,6 @@ const TrainRow = ({ train }) => {
     realStart !== null && realEnd !== null ? Math.floor((realEnd - realStart) / 60000) : null;
 
   const renderRealStartCell = () => {
-    if (!selected) return null;
     if (realStart) {
       return (
         <span style={{ color: startDifferenceInMinutes > 0 ? 'red' : 'green' }}>
@@ -54,7 +49,6 @@ const TrainRow = ({ train }) => {
   };
 
   const renderRealEndCell = () => {
-    if (!selected) return null;
     if (realEnd) {
       return (
         <span style={{ color: endDifferenceInMinutes > 0 ? 'red' : 'green' }}>
@@ -66,12 +60,12 @@ const TrainRow = ({ train }) => {
   };
 
   const renderRealDurationCell = () => {
-    if (!selected || realDuration === null) return null;
+    if (realDuration === null) return null;
     return `${realDuration} min`;
   };
 
   return (
-    <TableRow onClick={handleClick}>
+    <TableRow onClick={onRowClick} style={{ display: isSelected ? 'table-row' : 'none' }}>
       <StyledTableCell>{train.linea}</StyledTableCell>
       <StyledTableCell>{train.cdgoTren}</StyledTableCell>
       <StyledTableCell>{train.horaSalida}</StyledTableCell>

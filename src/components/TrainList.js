@@ -15,6 +15,12 @@ const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+
+  const handleRowClick = (index) => {
+    setSelectedRowIndex(index);
+  };
+
 
   useEffect(() => {
     if (origin && destination) {
@@ -46,17 +52,22 @@ const TrainList = ({ origin, destination }) => {
           <TableRow>
             <CustomTableHeadCell>Línea</CustomTableHeadCell>
             <CustomTableHeadCell>Tren</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br/>Salida<br/>EST</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br/>Salida<br/>REAL</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br/>Llegada<br/>EST</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br/>Llegada<br/>REAL</CustomTableHeadCell>
-            <CustomTableHeadCell>Duración<br/>EST</CustomTableHeadCell>
-            <CustomTableHeadCell>Duración<br/>REAL</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br />Salida<br />EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br />Salida<br />REAL</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br />Llegada<br />EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
+            <CustomTableHeadCell>Duración<br />EST</CustomTableHeadCell>
+            <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {trains.map((train) => (
-            <TrainRow key={`${train.linea}-${train.cdgoTren}`} train={train} />
+          {trains.map((train, index) => (
+            <TrainRow
+              key={`${train.linea}-${train.cdgoTren}`}
+              train={train}
+              isSelected={selectedRowIndex === index}
+              onRowClick={() => handleRowClick(index)}
+            />
           ))}
         </TableBody>
       </Table>
