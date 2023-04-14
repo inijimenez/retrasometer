@@ -47,11 +47,13 @@ export async function getTrains(origin, destination) {
   const horaSiguiente = new Date(Date.now() + 3600 * 1000).getHours();
 
   try {
-    //const cachedTrains = localStorage.getItem("trains");
-//
-//if (cachedTrains) {
-//      return JSON.parse(cachedTrains);
-//    }
+
+    console.log("Paso A - getTrains");
+    const cachedTrains = localStorage.getItem("trains");
+    console.log("Paso B - getTrains");
+    if (cachedTrains) {
+      return JSON.parse(cachedTrains);
+    }
     const response = await axios.post(HORARIOS_BASE_URL, {
       nucleo: '10',
       origen: origin.CÓDIGO,
@@ -67,16 +69,18 @@ export async function getTrains(origin, destination) {
       { headers });
 
     if (response.data) {
-      if (response.data.horario)
-      {
+      if (response.data.horario) {
+        console.log("Paso C - getTrains");
         //localStorage.setItem("trains", JSON.stringify(response.data.horario));
         return response.data.horario;
       }
     }
+    console.log("Paso D - getTrains");
   } catch (error) {
+    console.log("Paso E - getTrains");
     console.error('Error fetching trains:', error);
   }
-
+  console.log("Paso Z - getTrains");
   return [];
 }
 
