@@ -21,7 +21,7 @@ const TrainList = ({ origin, destination }) => {
       setLoading(true);
       const fetchTrains = async () => {
         console.log("GET TRAINS ORIGIN:" + JSON.stringify(origin));
-        const fetchedTrains = await getTrains(origin.CÓDIGO, destination.CÓDIGO);
+        const fetchedTrains = await getTrains(origin, destination);
         setTrains(fetchedTrains);
         setLoading(false);
       };
