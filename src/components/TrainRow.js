@@ -33,10 +33,10 @@ const TrainRow = ({ train }) => {
   };
 
   const startDifferenceInMinutes =
-    realStart !== null ? Math.floor((realStart - new Date(train.start)) / 60000) : null;
+    realStart !== null ? Math.floor((realStart - new Date(train.horaSalida)) / 60000) : null;
 
   const endDifferenceInMinutes =
-    realEnd !== null ? Math.floor((realEnd - new Date(train.end)) / 60000) : null;
+    realEnd !== null ? Math.floor((realEnd - new Date(train.horaLlegada)) / 60000) : null;
 
   const realDuration =
     realStart !== null && realEnd !== null ? Math.floor((realEnd - realStart) / 60000) : null;
