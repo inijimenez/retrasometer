@@ -72,13 +72,13 @@ const TrainRow = ({ train }) => {
 
   return (
     <TableRow onClick={handleClick}>
-      <StyledTableCell>{train.line}</StyledTableCell>
-      <StyledTableCell>{train.train}</StyledTableCell>
-      <StyledTableCell>{train.start}</StyledTableCell>
+      <StyledTableCell>{train.linea}</StyledTableCell>
+      <StyledTableCell>{train.cdgoTren}</StyledTableCell>
+      <StyledTableCell>{train.horaSalida}</StyledTableCell>
       <StyledTableCell>{renderRealStartCell()}</StyledTableCell>
-      <StyledTableCell>{train.end}</StyledTableCell>
+      <StyledTableCell>{train.horaLlegada}</StyledTableCell>
       <StyledTableCell>{renderRealEndCell()}</StyledTableCell>
-      <StyledTableCell>{train.duration}</StyledTableCell>
+      <StyledTableCell>{train.duracion}</StyledTableCell>
       <StyledTableCell>{renderRealDurationCell()}</StyledTableCell>
     </TableRow>
   );
