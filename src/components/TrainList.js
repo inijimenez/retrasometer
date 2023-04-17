@@ -16,15 +16,12 @@ const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedTrainId, setSelectedTrainId] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
 
-  const handleRowSelect = (id) => {
-    setSelectedTrainId(selectedTrainId === id ? null : id);
+  const handleRowClick = (index) => {
+    setSelectedRow(selectedRow === index ? null : index);
   };
 
-  const handleTimeUpdate = (id, type, newTime) => {
-    console.log(`Train ${id} ${type} time updated to ${newTime}`);
-  };
 
   useEffect(() => {
     if (origin && destination) {
@@ -57,29 +54,23 @@ const TrainList = ({ origin, destination }) => {
             <CustomTableHeadCell>Línea</CustomTableHeadCell>
             <CustomTableHeadCell>Tren</CustomTableHeadCell>
             <CustomTableHeadCell>Hora<br />Salida<br />EST</CustomTableHeadCell>
-             <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Salida<br />REAL</CustomTableHeadCell>
+             <CustomTableHeadCell className={selectedRow !== null ? '' : 'hidden'}>Hora<br />Salida<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Hora<br />Llegada<br />EST</CustomTableHeadCell>
-            <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
+            <CustomTableHeadCell  className={selectedRow !== null ? '' : 'hidden'}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Duración<br />EST</CustomTableHeadCell>
-            <CustomTableHeadCell  style={{ display: selectedTrainId !== null  ? "" : "none" }}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
+            <CustomTableHeadCell className={selectedRow !== null ? '' : 'hidden'}>Hora<br />Llegada<br />REAL</CustomTableHeadCell>
             <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {trains.map((train) => {
-            if (selectedTrainId === null || selectedTrainId === train.cdgoTren) {
-              return (
+          {trains.map((train, index) => (
                 <TrainRow
-                  key={train.cdgoTren}
-                  train={train}
-                  isSelected={selectedTrainId === train.cdgoTren}
-                  onRowClick={handleRowSelect}
-                  onTimeUpdate={handleTimeUpdate}
-                />
-              );
-            }
-            return null;
-          })}
+                key={train.cdgoTren}
+                rowData={train}
+                rowIndex={index}
+                isSelected={selectedRow === null || selectedRow === index}
+                onRowClick={handleRowClick} />
+                ))}
         </TableBody>
       </Table>
     </TableContainer>
