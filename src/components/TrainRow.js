@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { formatDuration, getDifferenceInMinutes } from '../helpers';
-import '../styles/Custom.css';
 
-const TrainRow = ({ train, rowIndex, isSelected, onRowClick }) => {
+const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
 
@@ -15,17 +14,21 @@ const TrainRow = ({ train, rowIndex, isSelected, onRowClick }) => {
     setRealArrivalTime(new Date());
   };
 
+  if (!visible) {
+    return null;
+  }
+
   return (
-    <TableRow  className={isSelected || onRowClick === null ? '' : 'hidden'}
-    onClick={() => onRowClick(rowIndex)}>
-      <TableCell>{train.linea}</TableCell>
-      <TableCell>{train.cdgoTren}</TableCell>
-      <TableCell>{train.horaSalida}</TableCell>
+    <TableRow  onClick={onClick}>
+      <TableCell>{data.linea}</TableCell>
+      <TableCell>{data.cdgoTren}</TableCell>
+      <TableCell>{data.horaSalida}</TableCell>
       <TableCell className={isSelected ? '' : 'hidden'}>
+      {!hiddenColumns.D && <TableCell>{data.D}</TableCell>}
         {realDepartureTime ? (
           <span
             style={{
-              color: getDifferenceInMinutes(train.horaSalida, realDepartureTime) > 0 ? 'red' : 'green',
+              color: getDifferenceInMinutes(data.horaSalida, realDepartureTime) > 0 ? 'red' : 'green',
             }}
           >
             {getDifferenceInMinutes(train.horaSalida, realDepartureTime)}

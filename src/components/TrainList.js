@@ -3,7 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { styled } from "@mui/system";
 import TrainRow from "./TrainRow";
 import { getTrains } from "../services/renfeAPI";
-import '../styles/Custom.css';
+
 
 const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
   fontWeight: "bold",
@@ -18,13 +18,19 @@ const TrainList = ({ origin, destination }) => {
   const [loading, setLoading] = useState(true);
 
   const [selectedRow, setSelectedRow] = useState(null);
+  const [columnsHidden, setColumnsHidden] = useState({ D: true, F: true, H: true, I: true });
 
-  const handleRowClick = (index) => {
-    const A = selectedRow === index ? null : index;
-    console.log("SelectedROW:" + A);
-    setSelectedRow(selectedRow === index ? null : index);
+  const onRowClick = (index) => {
+    if (selectedRow === null) {
+      setSelectedRow(index);
+      setColumnsHidden({ ...columnsHidden, D: false, F: false, H: false, I:false });
+    } else if (selectedRow === index) {
+      setSelectedRow(null);
+      setColumnsHidden({ ...columnsHidden, D: true, F: true, H: true, I: true });
+    } else {
+      setSelectedRow(index);
+    }
   };
-
 
   useEffect(() => {
     if (origin && destination) {
@@ -69,10 +75,10 @@ const TrainList = ({ origin, destination }) => {
           {trains.map((train, index) => (
                 <TrainRow
                 key={train.cdgoTren}
-                train={train}
-                rowIndex={index}
-                isSelected={selectedRow === index}
-                onRowClick={handleRowClick} />
+                data={train}
+                hiddenColumns={columnsHidden}
+                visible={selectedRow === null || selectedRow === index}
+                onClick={() => onRowClick(index)} />
                 ))}
         </TableBody>
       </Table>
