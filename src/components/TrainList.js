@@ -3,6 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import { styled } from "@mui/system";
 import TrainRow from "./TrainRow";
 import { getTrains } from "../services/renfeAPI";
+import '../styles/Custom.css';
 
 const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
   fontWeight: "bold",
@@ -19,6 +20,8 @@ const TrainList = ({ origin, destination }) => {
   const [selectedRow, setSelectedRow] = useState(null);
 
   const handleRowClick = (index) => {
+    const A = selectedRow === index ? null : index;
+    console.log("SelectedROW:" + A);
     setSelectedRow(selectedRow === index ? null : index);
   };
 
@@ -66,9 +69,9 @@ const TrainList = ({ origin, destination }) => {
           {trains.map((train, index) => (
                 <TrainRow
                 key={train.cdgoTren}
-                rowData={train}
+                train={train}
                 rowIndex={index}
-                isSelected={selectedRow === null || selectedRow === index}
+                isSelected={selectedRow === index}
                 onRowClick={handleRowClick} />
                 ))}
         </TableBody>

@@ -52,6 +52,7 @@ export async function getTrains(origin, destination) {
     const cachedTrains = localStorage.getItem("trains");
     console.log("Paso B - getTrains");
     if (cachedTrains) {
+      console.log("Paso C - getTrains CACHED");
       return JSON.parse(cachedTrains);
     }
     const params = {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { formatDuration, getDifferenceInMinutes } from '../helpers';
+import '../styles/Custom.css';
 
-const TrainRow = ({ train, rowIndex, isSelected, onRowClick } ) => {
+const TrainRow = ({ train, rowIndex, isSelected, onRowClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
 
@@ -15,12 +16,12 @@ const TrainRow = ({ train, rowIndex, isSelected, onRowClick } ) => {
   };
 
   return (
-    <TableRow  className={isSelected ? '' : 'hidden'}
+    <TableRow  className={isSelected || onRowClick === null ? '' : 'hidden'}
     onClick={() => onRowClick(rowIndex)}>
       <TableCell>{train.linea}</TableCell>
       <TableCell>{train.cdgoTren}</TableCell>
       <TableCell>{train.horaSalida}</TableCell>
-      <TableCell  className={isSelected ? '' : 'hidden'}>
+      <TableCell className={isSelected ? '' : 'hidden'}>
         {realDepartureTime ? (
           <span
             style={{
@@ -36,7 +37,7 @@ const TrainRow = ({ train, rowIndex, isSelected, onRowClick } ) => {
         )}
       </TableCell>
       <TableCell>{train.horaLlegada}</TableCell>
-      <TableCell  className={isSelected ? '' : 'hidden'}>
+      <TableCell className={isSelected ? '' : 'hidden'}>
         {realArrivalTime ? (
           <span
             style={{
@@ -52,7 +53,7 @@ const TrainRow = ({ train, rowIndex, isSelected, onRowClick } ) => {
         )}
       </TableCell>
       <TableCell>{train.duracion}</TableCell>
-      <TableCell  className={isSelected ? '' : 'hidden'}>
+      <TableCell className={isSelected ? '' : 'hidden'}>
         {isSelected && realDepartureTime && realArrivalTime && formatDuration(realArrivalTime - realDepartureTime)}
       </TableCell>
     </TableRow>
