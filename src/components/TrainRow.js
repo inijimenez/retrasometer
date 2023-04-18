@@ -20,10 +20,10 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
 
   return (
     <TableRow onClick={onClick}>
-      <TableCell>{data.linea}</TableCell>
-      <TableCell>{data.cdgoTren}</TableCell>
-      <TableCell>{data.horaSalida}</TableCell>
-      {!hiddenColumns.D && <TableCell>
+      <TableCell align="center">{data.linea}</TableCell>
+      <TableCell align="center">{data.cdgoTren}</TableCell>
+      <TableCell align="center">{data.horaSalida}</TableCell>
+      {!hiddenColumns.D && <TableCell align="center">
         {realDepartureTime ? (
           <span
             style={{
@@ -38,7 +38,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
           </Button>
         )}
       </TableCell>}
-      <TableCell>{data.horaLlegada}</TableCell>
+      <TableCell align="center">{data.horaLlegada}</TableCell>
       {!hiddenColumns.F && <TableCell>
         {realArrivalTime ? (
           <span
@@ -55,11 +55,11 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
         )}
 
       </TableCell>}
-      <TableCell>{data.duracion}</TableCell>
-      {!hiddenColumns.H && <TableCell>
+      <TableCell align="center">{data.duracion}</TableCell>
+      {!hiddenColumns.H && <TableCell align="center">
         {realDepartureTime && realArrivalTime && formatDuration(realArrivalTime - realDepartureTime)}
       </TableCell>}
-      {!hiddenColumns.I && <TableCell>
+      {!hiddenColumns.I && <TableCell align="center">
         Duración Total
       </TableCell>}
 

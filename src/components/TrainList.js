@@ -62,12 +62,12 @@ const TrainList = ({ origin, destination }) => {
           <TableRow>
             <CustomTableHeadCell>Línea</CustomTableHeadCell>
             <CustomTableHeadCell>Tren</CustomTableHeadCell>
-            <CustomTableHeadCell>Hora<br />Salida<br />EST</CustomTableHeadCell>
-            {!columnsHidden.D && <CustomTableHeadCell>Hora<br />Salida<br />REAL</CustomTableHeadCell>}
-            <CustomTableHeadCell>Hora<br />Llegada<br />EST</CustomTableHeadCell>
-            {!columnsHidden.F && <CustomTableHeadCell>Hora<br />Llegada<br />REAL</CustomTableHeadCell>}
+            <CustomTableHeadCell>Hora Salida<br />EST</CustomTableHeadCell>
+            {!columnsHidden.D && <CustomTableHeadCell>Hora Salida<br />REAL</CustomTableHeadCell>}
+            <CustomTableHeadCell>Hora Llegada<br />EST</CustomTableHeadCell>
+            {!columnsHidden.F && <CustomTableHeadCell>Hora Llegada<br />REAL</CustomTableHeadCell>}
             <CustomTableHeadCell>Duración<br />EST</CustomTableHeadCell>
-            {!columnsHidden.H && <CustomTableHeadCell>Hora<br />Llegada<br />REAL</CustomTableHeadCell>}
+            {!columnsHidden.H && <CustomTableHeadCell>Hora Llegada<br />REAL</CustomTableHeadCell>}
             {!columnsHidden.I && <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>}
           </TableRow>
         </TableHead>
