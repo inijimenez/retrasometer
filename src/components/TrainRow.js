@@ -19,46 +19,50 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   }
 
   return (
-    <TableRow  onClick={onClick}>
+    <TableRow onClick={onClick}>
       <TableCell>{data.linea}</TableCell>
       <TableCell>{data.cdgoTren}</TableCell>
       <TableCell>{data.horaSalida}</TableCell>
-      <TableCell className={isSelected ? '' : 'hidden'}>
-      {!hiddenColumns.D && <TableCell>{data.D}</TableCell>}
+      {!hiddenColumns.D && <TableCell>
         {realDepartureTime ? (
           <span
             style={{
               color: getDifferenceInMinutes(data.horaSalida, realDepartureTime) > 0 ? 'red' : 'green',
             }}
           >
-            {getDifferenceInMinutes(train.horaSalida, realDepartureTime)}
+            {getDifferenceInMinutes(data.horaSalida, realDepartureTime)}
           </span>
         ) : (
           <Button onClick={handleDepartureTimeUpdate} variant="contained" color="primary">
             Actualizar Hora
           </Button>
         )}
-      </TableCell>
-      <TableCell>{train.horaLlegada}</TableCell>
-      <TableCell className={isSelected ? '' : 'hidden'}>
+      </TableCell>}
+      <TableCell>{data.horaLlegada}</TableCell>
+      {!hiddenColumns.F && <TableCell>
         {realArrivalTime ? (
           <span
             style={{
-              color: getDifferenceInMinutes(train.horaLlegada, realArrivalTime) > 0 ? 'red' : 'green',
+              color: getDifferenceInMinutes(data.horaLlegada, realArrivalTime) > 0 ? 'red' : 'green',
             }}
           >
-            {getDifferenceInMinutes(train.horaLlegada, realArrivalTime)}
+            {getDifferenceInMinutes(data.horaLlegada, realArrivalTime)}
           </span>
         ) : (
           <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
             Actualizar Hora
           </Button>
         )}
-      </TableCell>
-      <TableCell>{train.duracion}</TableCell>
-      <TableCell className={isSelected ? '' : 'hidden'}>
-        {isSelected && realDepartureTime && realArrivalTime && formatDuration(realArrivalTime - realDepartureTime)}
-      </TableCell>
+
+      </TableCell>}
+      <TableCell>{data.duracion}</TableCell>
+      {!hiddenColumns.H && <TableCell>
+        {realDepartureTime && realArrivalTime && formatDuration(realArrivalTime - realDepartureTime)}
+      </TableCell>}
+      {!hiddenColumns.I && <TableCell>
+        Duración Total
+      </TableCell>}
+
     </TableRow>
   );
 };
