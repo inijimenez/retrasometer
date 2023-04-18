@@ -21,13 +21,18 @@ const TrainList = ({ origin, destination }) => {
   const [columnsHidden, setColumnsHidden] = useState({ D: true, F: true, H: true, I: true });
 
   const onRowClick = (index) => {
+    console.log("onRowClick " + index);
+
     if (selectedRow === null) {
+      console.log("onRowClick A");
       setSelectedRow(index);
       setColumnsHidden({ ...columnsHidden, D: false, F: false, H: false, I:false });
     } else if (selectedRow === index) {
-      setSelectedRow(null);
-      setColumnsHidden({ ...columnsHidden, D: true, F: true, H: true, I: true });
+      console.log("onRowClick B");
+      //setSelectedRow(null);
+      //setColumnsHidden({ ...columnsHidden, D: true, F: true, H: true, I: true });
     } else {
+      console.log("onRowClick C");
       setSelectedRow(index);
     }
   };

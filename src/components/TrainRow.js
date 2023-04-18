@@ -5,13 +5,21 @@ import { formatDuration, getDifferenceInMinutes } from '../helpers';
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
+  const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
+  const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
+
+  
 
   const handleDepartureTimeUpdate = () => {
-    setRealDepartureTime(new Date());
+    const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+    setRealDepartureTime(realTime);
+    setRealDepartureTimeDiff(getDifferenceInMinutes(data.horaSalida, realTime))
   };
 
   const handleArrivalTimeUpdate = () => {
-    setRealArrivalTime(new Date());
+    const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+    setRealArrivalTime(realTime);
+    setRealArrivalTimeDiff(getDifferenceInMinutes(data.horaLlegada, realTime))
   };
 
   if (!visible) {
@@ -24,13 +32,13 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       <TableCell align="center">{data.cdgoTren}</TableCell>
       <TableCell align="center">{data.horaSalida}</TableCell>
       {!hiddenColumns.D && <TableCell align="center">
-        {realDepartureTime ? (
+        {realDepartureTime ? (          
           <span
             style={{
-              color: getDifferenceInMinutes(data.horaSalida, realDepartureTime) > 0 ? 'red' : 'green',
+              color: realDepartureTimeDiff > 0 ? 'red' : 'green',
             }}
           >
-            {getDifferenceInMinutes(data.horaSalida, realDepartureTime)}
+            {realDepartureTimeDiff}
           </span>
         ) : (
           <Button onClick={handleDepartureTimeUpdate} variant="contained" color="primary">
@@ -43,10 +51,10 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
         {realArrivalTime ? (
           <span
             style={{
-              color: getDifferenceInMinutes(data.horaLlegada, realArrivalTime) > 0 ? 'red' : 'green',
+              color: realArrivalTimeDiff > 0 ? 'red' : 'green',
             }}
           >
-            {getDifferenceInMinutes(data.horaLlegada, realArrivalTime)}
+            {realArrivalTimeDiff}
           </span>
         ) : (
           <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
