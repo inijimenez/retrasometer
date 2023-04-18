@@ -8,7 +8,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
 
-  
+
 
   const handleDepartureTimeUpdate = () => {
     const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
@@ -32,13 +32,16 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       <TableCell align="center">{data.cdgoTren}</TableCell>
       <TableCell align="center">{data.horaSalida}</TableCell>
       {!hiddenColumns.D && <TableCell align="center">
-        {realDepartureTime ? (          
-          <span
-            style={{
-              color: realDepartureTimeDiff > 0 ? 'red' : 'green',
-            }}
-          >
-            {realDepartureTimeDiff}
+        {realDepartureTime ? (
+          <span>
+            {realDepartureTime}
+            <span
+              style={{
+                color: realDepartureTimeDiff > 0 ? 'red' : 'green',
+              }}
+            >
+              {'(' + realDepartureTimeDiff + 'min)'}
+            </span>
           </span>
         ) : (
           <Button onClick={handleDepartureTimeUpdate} variant="contained" color="primary">
@@ -49,12 +52,15 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       <TableCell align="center">{data.horaLlegada}</TableCell>
       {!hiddenColumns.F && <TableCell>
         {realArrivalTime ? (
+          <span>
+            {realArrivalTime}
           <span
             style={{
               color: realArrivalTimeDiff > 0 ? 'red' : 'green',
             }}
           >
-            {realArrivalTimeDiff}
+            {'(' + realArrivalTimeDiff + 'min)'}
+          </span>
           </span>
         ) : (
           <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
