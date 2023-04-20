@@ -72,8 +72,8 @@ const TrainList = ({ origin, destination }) => {
             <CustomTableHeadCell>Hora Llegada<br />EST</CustomTableHeadCell>
             {!columnsHidden.F && <CustomTableHeadCell>Hora Llegada<br />REAL</CustomTableHeadCell>}
             <CustomTableHeadCell>Duración<br />EST</CustomTableHeadCell>
-            {!columnsHidden.H && <CustomTableHeadCell>Hora Llegada<br />REAL</CustomTableHeadCell>}
-            {!columnsHidden.I && <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>}
+            {!columnsHidden.H && <CustomTableHeadCell>Duración<br />REAL</CustomTableHeadCell>}
+            {!columnsHidden.I && <CustomTableHeadCell>Retraso</CustomTableHeadCell>}
           </TableRow>
         </TableHead>
         <TableBody>
