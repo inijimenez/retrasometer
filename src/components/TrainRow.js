@@ -5,8 +5,11 @@ import { formatDuration, getDifferenceInMinutes } from '../helpers';
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
+  const [realDuration, setRealDuration] = useState(null);
+
   const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
+  const [realDurationDiff, setRealDurationDiff] = useState(null);
 
 
 
@@ -20,6 +23,13 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
     const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
     setRealArrivalTime(realTime);
     setRealArrivalTimeDiff(getDifferenceInMinutes(data.horaLlegada, realTime))
+    if (realDepartureTime)
+    {
+      const realDuration = getDifferenceInMinutes(realDepartureTime, realTime);
+      const estDuration = getDifferenceInMinutes(data.horaSalida, data.horaLlegada);
+      setRealDuration(realDuration)
+      setRealDurationDiff(realDuration-estDuration)
+    }
   };
 
   if (!visible) {
@@ -71,7 +81,20 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       </TableCell>}
       <TableCell align="center">{data.duracion}</TableCell>
       {!hiddenColumns.H && <TableCell align="center">
-        {realDepartureTime && realArrivalTime && formatDuration(realArrivalTime - realDepartureTime)}
+        {realDepartureTime ? (
+          <span>
+            {realDepartureTime}&nbsp;
+            <span
+              style={{
+                color: realDurationDiff > 0 ? 'red' : 'green',
+              }}
+            >
+              {'(' + realDurationDiff + 'min.)'}
+            </span>
+          </span>
+        ) : (
+       -
+        )}
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
         Duración Total
