@@ -83,7 +83,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       {!hiddenColumns.H && <TableCell align="center">
         {realDepartureTime ? (
           <span>
-            {realDepartureTime}&nbsp;
+            {realDuration}&nbsp;
             <span
               style={{
                 color: realDurationDiff > 0 ? 'red' : 'green',
@@ -97,7 +97,21 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
         )}
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
-        {realDuration}
+      {        {realDuration} ? (
+          <span>
+            {realDepartureTime}&nbsp;
+            <span
+              style={{
+                color: realDurationDiff > 0 ? 'red' : 'green',
+              }}
+            >
+              {'(' + realDurationDiff + 'min.)'}
+            </span>
+          </span>
+        ) : (
+       <span>-</span>
+        )}
+
       </TableCell>}
 
     </TableRow>
