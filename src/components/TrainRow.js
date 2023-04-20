@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
-import {getDifferenceInMinutes } from '../helpers';
+import { getDifferenceInMinutes } from '../helpers';
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
@@ -23,12 +23,11 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
     const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
     setRealArrivalTime(realTime);
     setRealArrivalTimeDiff(getDifferenceInMinutes(data.horaLlegada, realTime))
-    if (realDepartureTime)
-    {
+    if (realDepartureTime) {
       const realDuration = getDifferenceInMinutes(realDepartureTime, realTime);
       const estDuration = getDifferenceInMinutes(data.horaSalida, data.horaLlegada);
       setRealDuration(realDuration)
-      setRealDurationDiff(realDuration-estDuration)
+      setRealDurationDiff(realDuration - estDuration)
     }
   };
 
@@ -64,13 +63,13 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
         {realArrivalTime ? (
           <span>
             {realArrivalTime}&nbsp;
-          <span
-            style={{
-              color: realArrivalTimeDiff > 0 ? 'red' : 'green',
-            }}
-          >
-            {'(' + realArrivalTimeDiff + 'min.)'}
-          </span>
+            <span
+              style={{
+                color: realArrivalTimeDiff > 0 ? 'red' : 'green',
+              }}
+            >
+              {'(' + realArrivalTimeDiff + 'min.)'}
+            </span>
           </span>
         ) : (
           <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
@@ -93,11 +92,11 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
             </span>
           </span>
         ) : (
-       <span>-</span>
+          <span>-</span>
         )}
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
-      {        {realDuration} ? (
+        {{ realDuration } ? (
           <span>
             {realDepartureTime}&nbsp;
             <span
@@ -109,7 +108,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
             </span>
           </span>
         ) : (
-       <span>-</span>
+          <span>-</span>
         )}
 
       </TableCell>}
