@@ -93,7 +93,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
             </span>
           </span>
         ) : (
-       -
+       <span>-</span>
         )}
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
