@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
-import { formatDuration, getDifferenceInMinutes } from '../helpers';
+import {getDifferenceInMinutes } from '../helpers';
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
@@ -97,7 +97,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
         )}
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
-        Duración Total
+        {realDuration}
       </TableCell>}
 
     </TableRow>
