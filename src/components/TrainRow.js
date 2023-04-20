@@ -10,6 +10,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
   const [realDurationDiff, setRealDurationDiff] = useState(null);
+  const [totalDelay, setTotalDelay] = useState(null);
 
 
 
@@ -28,6 +29,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       const estDurationA = getDifferenceInMinutes(data.horaSalida, data.horaLlegada);
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
+      setTotalDelay(getDifferenceInMinutes(data.horaSalida, realTime));
     }
   };
 
@@ -97,14 +99,13 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       </TableCell>}
       {!hiddenColumns.I && <TableCell align="center">
         {{ realDuration } ? (
-          <span>
-            {realDuration}&nbsp;
+          <span>            
             <span
               style={{
-                color: realDurationDiff > 0 ? 'red' : 'green',
+                color: totalDelay > 0 ? 'red' : 'green',
               }}
             >
-              {'(' + realDurationDiff + 'min.)'}
+              {'' + totalDelay + 'min.'}
             </span>
           </span>
         ) : (
