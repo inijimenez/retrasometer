@@ -4,9 +4,9 @@ import { getDifferenceInMinutes } from '../helpers';
 import 'dotenv/config';
 import { connect } from '@planetscale/database'
 const config = {
-  host: process.env.DATABASE_HOST,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD
+  host: "aws.connect.psdb.cloud",
+  username: "zfc30rgeldzfb6bc58gj",
+  password: "main-2023-4-19-1u4rg8"
 }
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
