@@ -29,7 +29,7 @@ const App = () => {
   return (
     <Container>
       <Typography variant="h3" component="h1" align="center" gutterBottom>
-        Mi App
+        Retrasometer
       </Typography>
       <Typography variant="subtitle1" align="center" gutterBottom>
         Versión: 1.0.0
