@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { getDifferenceInMinutes } from '../helpers';
+import 'dotenv/config';
+import { connect } from '@planetscale/database'
+const config = {
+  host: process.env.DATABASE_HOST,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD
+}
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
@@ -12,8 +19,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDurationDiff, setRealDurationDiff] = useState(null);
   const [totalDelay, setTotalDelay] = useState(null);
 
-
-
+ 
   const handleDepartureTimeUpdate = () => {
     const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
     setRealDepartureTime(realTime);
@@ -29,9 +35,21 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       const estDurationA = getDifferenceInMinutes(data.horaSalida, data.horaLlegada);
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
-      setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
+      setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));   
+      saveDBData();
     }
   };
+
+  const saveDBData = async () => {  // marcar la función como async
+    const conn = connect(config);
+    const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
+    const results = await conn.transaction(async (tx) => {
+      const whenBranch = await tx.execute(query, ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay])      
+      return [whenBranch]
+    })
+    console.log(results);
+  }
 
   if (!visible) {
     return null;
