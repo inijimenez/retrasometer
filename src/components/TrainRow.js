@@ -42,24 +42,31 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   };
 
   const saveDBData = () => {
-    const connection = mysql.createConnection(connectionConfig);
+    try {
+      const connection = mysql.createConnection(connectionConfig);
 
-    const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    const values =  ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay];
+      const values =  ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay];
 
-    connection.query(query, values, (error, results) => {
-      if (error) {
-        console.error('Error inserting data:', error);
-      } else {
-        console.log('Data inserted successfully!');
-        // Realizar acciones adicionales después de la inserción
-      }
+      connection.query(query, values, (error, results) => {
+        if (error) {
+          console.error('Error inserting data:', error);
+          console.log('A: Error inserting data:', error);
+        } else {
+          console.log('Data inserted successfully!');
+          // Realizar acciones adicionales después de la inserción
+        }
 
-      connection.end(); // Cerrar la conexión después de la inserción
-    });
+        connection.end(); // Cerrar la conexión después de la inserción
+      });
+    } catch (error) {
+      console.error('Error connecting to the database:', error);
+      console.log('B: Error connecting to the database:', error);
+    }
   }
+
 
 
   if (!visible) {
