@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { getDifferenceInMinutes } from '../helpers';
 import 'dotenv/config';
-import { connect } from '@planetscale/database'
-const config = {
-  host: "aws.connect.psdb.cloud",
-  username: "zfc30rgeldzfb6bc58gj",
-  password: "main-2023-4-19-1u4rg8"
-}
+import mysql from 'mysql2';
 
+const connectionConfig = {
+  host: 'aws.connect.psdb.cloud',
+  user: 'zfc30rgeldzfb6bc58gj',
+  password: 'main-2023-4-19-1u4rg8',
+  database: 'retrasometer',
+};
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
@@ -40,16 +41,25 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
     }
   };
 
-  const saveDBData = async () => {  // marcar la función como async
-    const conn = connect(config);
-    const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  
-    const results = await conn.transaction(async (tx) => {
-      const whenBranch = await tx.execute(query, ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay])      
-      return [whenBranch]
-    })
-    console.log(results);
-  }
+  const saveDBData = () => {
+    const connection = mysql.createConnection(connectionConfig);
+
+    const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const values =  ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay];
+
+    connection.query(query, values, (error, results) => {
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log('Data inserted successfully!');
+        // Realizar acciones adicionales después de la inserción
+      }
+
+      connection.end(); // Cerrar la conexión después de la inserción
+    });
+
 
   if (!visible) {
     return null;
