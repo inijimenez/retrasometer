@@ -43,31 +43,41 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
 
   const saveDBData = ()  => {
     try {
+      console.log("saveDBData -A");
       const connection = mysql.createConnection(connectionConfig);
+      console.log("saveDBData -B");
 
       connection.connect((error) => {
+        console.log("saveDBData -C");
         if (error) {
+          console.log("saveDBData -D");
           console.error('Error connecting to the database:', error);
           return;
         }
-
+        console.log("saveDBData -E");
         const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   
+        console.log("saveDBData -F");
         const values =  ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay];
-  
+        console.log("saveDBData -G");
         connection.query(query, values, (queryError, results) => {
           if (queryError) {
+            console.log("saveDBData -H");
             console.error('Error inserting data:', queryError);
           } else {
+            console.log("saveDBData -I");
             console.log('Data inserted successfully!');
             // Realizar acciones adicionales después de la inserción
           }
+          console.log("saveDBData -J");
 
           connection.end(); // Cerrar la conexión después de la inserción
+          console.log("saveDBData -L");
         });
       });
     } catch (error) {
+      console.log("saveDBData -M");
       console.error('Error connecting to the database:', error);
     }
   }
