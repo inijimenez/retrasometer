@@ -59,6 +59,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
 
       connection.end(); // Cerrar la conexión después de la inserción
     });
+  }
 
 
   if (!visible) {
