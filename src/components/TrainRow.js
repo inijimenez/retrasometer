@@ -4,6 +4,8 @@ import { getDifferenceInMinutes } from '../helpers';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -68,6 +70,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -B");
     const db = firebase.firestore();
     console.log("saveDBData -C");
+    console.log("uniqueIdentifier:" + uniqueIdentifier);
     const trainData = {
       date: new Date().toLocaleString(),
       travel: uniqueIdentifier,
@@ -90,9 +93,11 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -D");
     db.collection('train_data').add(trainData)
       .then((docRef) => {
+        toast.success('Los datos se han guardado con éxito');
         console.log('Documento guardado con ID:', docRef.id);
       })
       .catch((error) => {
+        toast.error('ha habido un error al guardar los datos: ' + error);
         console.error('Error al guardar el documento:', error);
       });
     console.log("saveDBData -E");
