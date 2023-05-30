@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { getDifferenceInMinutes } from '../helpers';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from 'firebase/compat/app'; 
+import 'firebase/compat/firestore';
 import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
 
 
