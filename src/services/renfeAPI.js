@@ -9,7 +9,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-const searchParams;
+const searchParams = [];
 
 export async function getStations() {
   try {
