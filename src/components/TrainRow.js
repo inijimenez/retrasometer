@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
 
-
+// aqui va
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
