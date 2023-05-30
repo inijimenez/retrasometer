@@ -9,6 +9,8 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+const searchParams;
+
 export async function getStations() {
   try {
     const cachedStations = localStorage.getItem("stations");
@@ -38,6 +40,11 @@ export async function getStations() {
   }
 
   return [];
+}
+
+export async function getSearchParams()
+{  
+  return searchParams;
 }
 
 export async function getTrains(origin, destination) {
@@ -74,6 +81,7 @@ export async function getTrains(origin, destination) {
     if (response.data) {
       if (response.data.horario) {
         console.log("Paso C - getTrains");
+        searchParams = response.data.peticion;
         return response.data.horario;
       }
     }
@@ -93,6 +101,7 @@ export async function getTrains(origin, destination) {
 const renfeAPI = {
   getStations,
   getTrains,
+  getSearchParams
 };
 
 export default renfeAPI;

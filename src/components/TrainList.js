@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import TrainRow from "./TrainRow";
-import { getTrains } from "../services/renfeAPI";
+import { getSearchParams, getTrains } from "../services/renfeAPI";
 
 
 const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
@@ -15,6 +15,7 @@ const CustomTableHeadCell = styled(TableCell)(({ theme }) => ({
 
 const TrainList = ({ origin, destination }) => {
   const [trains, setTrains] = useState([]);
+  const [searchParams, setSearchParams] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [selectedRow, setSelectedRow] = useState(null);
@@ -40,10 +41,10 @@ const TrainList = ({ origin, destination }) => {
   useEffect(() => {
     if (origin && destination) {
       setLoading(true);
-      const fetchTrains = async () => {
-        console.log("GET TRAINS ORIGIN:" + JSON.stringify(origin));
+      const fetchTrains = async () => {       
         const fetchedTrains = await getTrains(origin, destination);
         setTrains(fetchedTrains);
+        setSearchParams(await getSearchParams());
         setLoading(false);
       };
       fetchTrains();
@@ -81,6 +82,7 @@ const TrainList = ({ origin, destination }) => {
                 <TrainRow
                 key={train.cdgoTren}
                 data={train}
+                searchParams={searchParams}
                 hiddenColumns={columnsHidden}
                 visible={selectedRow === null || selectedRow === index}
                 onClick={() => onRowClick(index)} />
