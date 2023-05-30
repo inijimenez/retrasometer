@@ -6,12 +6,7 @@ import 'firebase/firestore';
 import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
 
 
-const connectionConfig = {
-  host: 'aws.connect.psdb.cloud',
-  user: 'zfc30rgeldzfb6bc58gj',
-  password: 'main-2023-4-19-1u4rg8',
-  database: 'retrasometer',
-};
+
 const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
