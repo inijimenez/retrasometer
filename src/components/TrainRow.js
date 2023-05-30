@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { getDifferenceInMinutes } from '../helpers';
-import 'dotenv/config';
-import mysql from 'mysql2';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
+
 
 const connectionConfig = {
   host: 'aws.connect.psdb.cloud',
@@ -20,7 +22,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
   const [realDurationDiff, setRealDurationDiff] = useState(null);
   const [totalDelay, setTotalDelay] = useState(null);
 
- 
+
   const handleDepartureTimeUpdate = () => {
     const realTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
     setRealDepartureTime(realTime);
@@ -36,139 +38,125 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick }) => {
       const estDurationA = getDifferenceInMinutes(data.horaSalida, data.horaLlegada);
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
-      setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));   
+      setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
       saveDBData();
     }
   };
 
-  const saveDBData = ()  => {
-    try {
-      console.log("saveDBData -A");
-      const connection = mysql.createConnection(connectionConfig);
-      console.log("saveDBData -B");
+  const saveDBData = () => {
+    console.log("saveDBData -A");
+    firebase.initializeApp(firebaseConfig);
 
-      connection.connect((error) => {
-        console.log("saveDBData -C");
-        if (error) {
-          console.log("saveDBData -D");
-          console.error('Error connecting to the database:', error);
-          return;
-        }
-        console.log("saveDBData -E");
-        const query = `INSERT INTO train_data (travel, line, trainID, origin, destination, timeDepartureEST, timeDepartureREAL, delayDeparture, timeArrivalEST, timeArrivalREAL, delayArrival, durationEST, durationREAL, durationDIFF, totalDelay) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    console.log("saveDBData -B");
+    const db = firebase.firestore();
+    console.log("saveDBData -C");
+    const trainData = {
+      travel: 'Nombre del viaje',
+      line: 'Nombre de la línea',
+      trainID: 'ID del tren',
+      origin: "popo",
+      destination: "pepe"
+    };
+    console.log("saveDBData -D");
+    db.collection('train_data').add(trainData)
+    .then((docRef) => {
+      console.log('Documento guardado con ID:', docRef.id);
+    })
+    .catch((error) => {
+      console.error('Error al guardar el documento:', error);
+    });
+    console.log("saveDBData -E");
+
   
-        console.log("saveDBData -F");
-        const values =  ["test", data.linea,data.cdgoTren,"origen","destino", data.horaSalida, realDepartureTime,realDepartureTimeDiff,data.horaLlegada, realArrivalTime, realArrivalTimeDiff, totalDelay];
-        console.log("saveDBData -G");
-        connection.query(query, values, (queryError, results) => {
-          if (queryError) {
-            console.log("saveDBData -H");
-            console.error('Error inserting data:', queryError);
-          } else {
-            console.log("saveDBData -I");
-            console.log('Data inserted successfully!');
-            // Realizar acciones adicionales después de la inserción
-          }
-          console.log("saveDBData -J");
-
-          connection.end(); // Cerrar la conexión después de la inserción
-          console.log("saveDBData -L");
-        });
-      });
-    } catch (error) {
-      console.log("saveDBData -M");
-      console.error('Error connecting to the database:', error);
     }
-  }
 
   
 
 
 
   if (!visible) {
-    return null;
-  }
+      return null;
+    }
 
-  return (
-    <TableRow onClick={onClick}>
-      <TableCell align="center">{data.linea}</TableCell>
-      <TableCell align="center">{data.cdgoTren}</TableCell>
-      <TableCell align="center">{data.horaSalida}</TableCell>
-      {!hiddenColumns.D && <TableCell align="center">
-        {realDepartureTime ? (
-          <span>
-            {realDepartureTime}&nbsp;
-            <span
-              style={{
-                color: realDepartureTimeDiff > 0 ? 'red' : 'green',
-              }}
-            >
-              {'(' + realDepartureTimeDiff + 'min.)'}
+    return (
+      <TableRow onClick={onClick}>
+        <TableCell align="center">{data.linea}</TableCell>
+        <TableCell align="center">{data.cdgoTren}</TableCell>
+        <TableCell align="center">{data.horaSalida}</TableCell>
+        {!hiddenColumns.D && <TableCell align="center">
+          {realDepartureTime ? (
+            <span>
+              {realDepartureTime}&nbsp;
+              <span
+                style={{
+                  color: realDepartureTimeDiff > 0 ? 'red' : 'green',
+                }}
+              >
+                {'(' + realDepartureTimeDiff + 'min.)'}
+              </span>
             </span>
-          </span>
-        ) : (
-          <Button onClick={handleDepartureTimeUpdate} variant="contained" color="primary">
-            Actualizar Hora
-          </Button>
-        )}
-      </TableCell>}
-      <TableCell align="center">{data.horaLlegada}</TableCell>
-      {!hiddenColumns.F && <TableCell>
-        {realArrivalTime ? (
-          <span>
-            {realArrivalTime}&nbsp;
-            <span
-              style={{
-                color: realArrivalTimeDiff > 0 ? 'red' : 'green',
-              }}
-            >
-              {'(' + realArrivalTimeDiff + 'min.)'}
+          ) : (
+            <Button onClick={handleDepartureTimeUpdate} variant="contained" color="primary">
+              Actualizar Hora
+            </Button>
+          )}
+        </TableCell>}
+        <TableCell align="center">{data.horaLlegada}</TableCell>
+        {!hiddenColumns.F && <TableCell>
+          {realArrivalTime ? (
+            <span>
+              {realArrivalTime}&nbsp;
+              <span
+                style={{
+                  color: realArrivalTimeDiff > 0 ? 'red' : 'green',
+                }}
+              >
+                {'(' + realArrivalTimeDiff + 'min.)'}
+              </span>
             </span>
-          </span>
-        ) : (
-          <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
-            Actualizar Hora
-          </Button>
-        )}
+          ) : (
+            <Button onClick={handleArrivalTimeUpdate} variant="contained" color="primary">
+              Actualizar Hora
+            </Button>
+          )}
 
-      </TableCell>}
-      <TableCell align="center">{data.duracion}</TableCell>
-      {!hiddenColumns.H && <TableCell align="center">
-        {realDepartureTime && realDuration? (
-          <span>
-            {realDuration}&nbsp;
-            <span
-              style={{
-                color: realDurationDiff > 0 ? 'red' : 'green',
-              }}
-            >
-              {'(' + realDurationDiff + 'min.)'}
+        </TableCell>}
+        <TableCell align="center">{data.duracion}</TableCell>
+        {!hiddenColumns.H && <TableCell align="center">
+          {realDepartureTime && realDuration ? (
+            <span>
+              {realDuration}&nbsp;
+              <span
+                style={{
+                  color: realDurationDiff > 0 ? 'red' : 'green',
+                }}
+              >
+                {'(' + realDurationDiff + 'min.)'}
+              </span>
             </span>
-          </span>
-        ) : (
-          <span>-</span>
-        )}
-      </TableCell>}
-      {!hiddenColumns.I && <TableCell align="center">
-        {realDepartureTime && realDuration ? (
-          <span>            
-            <span
-              style={{
-                color: totalDelay > 0 ? 'red' : 'green',
-              }}
-            >
-              {'' + totalDelay + 'min.'}
+          ) : (
+            <span>-</span>
+          )}
+        </TableCell>}
+        {!hiddenColumns.I && <TableCell align="center">
+          {realDepartureTime && realDuration ? (
+            <span>
+              <span
+                style={{
+                  color: totalDelay > 0 ? 'red' : 'green',
+                }}
+              >
+                {'' + totalDelay + 'min.'}
+              </span>
             </span>
-          </span>
-        ) : (
-          <span>-</span>
-        )}
+          ) : (
+            <span>-</span>
+          )}
 
-      </TableCell>}
+        </TableCell>}
 
-    </TableRow>
-  );
-};
+      </TableRow>
+    );
+  };
 
-export default TrainRow;
+  export default TrainRow;
