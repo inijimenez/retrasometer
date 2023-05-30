@@ -4,8 +4,7 @@ import { getDifferenceInMinutes } from '../helpers';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configuración de Firebase
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useToasts } from 'react-toast-notifications';
 
 
 
@@ -19,6 +18,7 @@ const generateUniqueIdentifier = () => {
 };
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
+  const { addToast } = useToasts();
   const [realDepartureTime, setRealDepartureTime] = useState(null);
   const [realArrivalTime, setRealArrivalTime] = useState(null);
   const [realDuration, setRealDuration] = useState(null);
@@ -65,6 +65,8 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     }
 
     console.log("saveDBData -A");
+    console.log("uniqueIdentifier:" + uniqueIdentifier);
+
     firebase.initializeApp(firebaseConfig);
 
     console.log("saveDBData -B");
@@ -93,11 +95,13 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -D");
     db.collection('train_data').add(trainData)
       .then((docRef) => {
-        toast.success('Los datos se han guardado con éxito');
+      // Mostrar mensaje de éxito en un popup
+      addToast('Los datos se han guardado con éxito', { appearance: 'success' });
         console.log('Documento guardado con ID:', docRef.id);
       })
       .catch((error) => {
-        toast.error('ha habido un error al guardar los datos: ' + error);
+      // Mostrar mensaje de error en un popup
+      addToast('Error al guardar los datos:' + error, { appearance: 'error' });
         console.error('Error al guardar el documento:', error);
       });
     console.log("saveDBData -E");

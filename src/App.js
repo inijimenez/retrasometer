@@ -4,6 +4,7 @@ import StationSelect from "./components/StationSelect";
 import TrainList from "./components/TrainList";
 import localStations from './stations.json';
 import localTrains from './trains.json';
+import { ToastProvider } from 'react-toast-notifications';
 
 const App = () => {
   const [origin, setOrigin] = useState(null);
@@ -27,6 +28,7 @@ const App = () => {
     }
   }, []);
   return (
+    <ToastProvider>
     <Container>
       <Typography variant="h3" component="h1" align="center" gutterBottom>
         Retrasometer
@@ -56,6 +58,7 @@ const App = () => {
       )}
       </Box>
     </Container>
+    </ToastProvider>
   );
 };
 
