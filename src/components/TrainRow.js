@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TableCell, TableRow, Button } from '@mui/material';
 import { getDifferenceInMinutes } from '../helpers';
 import firebase from 'firebase/compat/app';
@@ -26,8 +26,8 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
   const [realDurationDiff, setRealDurationDiff] = useState(null);
-  let [totalDelay, setTotalDelay] = useState(null);
-  let [uniqueIdentifier, setUniqueIdentifier] = useState('');
+  const [totalDelay, setTotalDelay] = useState(null);
+  const [uniqueIdentifier, setUniqueIdentifier] = useState('');
 
 
   const handleDepartureTimeUpdate = () => {
@@ -46,11 +46,12 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
       setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
-      saveDBData();
     }
   };
 
-  const saveDBData = () => {
+  
+
+  const saveDBData =useCallback(() =>  {
     // Comprobar si ya existe un identificador único en el almacenamiento local
     const storedIdentifier = localStorage.getItem('uniqueIdentifier');
     if (storedIdentifier) {
@@ -81,7 +82,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       origin: searchParams.descEstOrigen,
       destination: searchParams.descEstDestino,
       originID: searchParams.cdgoEstOrigen,
-      destinationID:searchParams.cdgoEstDestino,
+      destinationID: searchParams.cdgoEstDestino,
       departureEST: data.horaSalida,
       departureREAL: realDepartureTime,
       departureDIFF: realDepartureTimeDiff,
@@ -95,23 +96,39 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -D");
     db.collection('train_data').add(trainData)
       .then((docRef) => {
-      // Mostrar mensaje de éxito en un popup
-      addToast('Los datos se han guardado con éxito', { appearance: 'success' });
+        // Mostrar mensaje de éxito en un popup
+        addToast('Los datos se han guardado con éxito', { appearance: 'success' });
         console.log('Documento guardado con ID:', docRef.id);
       })
       .catch((error) => {
-      // Mostrar mensaje de error en un popup
-      addToast('Error al guardar los datos:' + error, { appearance: 'error' });
+        // Mostrar mensaje de error en un popup
+        addToast('Error al guardar los datos:' + error, { appearance: 'error' });
         console.error('Error al guardar el documento:', error);
       });
     console.log("saveDBData -E");
 
 
-  }
+  }, [uniqueIdentifier, data.linea, data.cdgoTren, data.horaSalida, data.duracion, searchParams.descEstOrigen, searchParams.descEstDestino, searchParams.cdgoEstOrigen, searchParams.cdgoEstDestino, realDepartureTime, realDepartureTimeDiff, realArrivalTime, realArrivalTimeDiff, realDuration, totalDelay, addToast]);
 
 
-
-
+  useEffect(() => {
+    if (
+      realDepartureTime &&
+      realArrivalTime &&
+      realDuration &&
+      totalDelay &&
+      uniqueIdentifier
+    ) {
+      saveDBData();
+    }
+  }, [
+    realDepartureTime,
+    realArrivalTime,
+    realDuration,
+    totalDelay,
+    uniqueIdentifier,
+    saveDBData,
+  ]);
 
   if (!visible) {
     return null;
