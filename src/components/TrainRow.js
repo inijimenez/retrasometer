@@ -112,6 +112,8 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   useEffect(() => {
+    console.log("USE EFFECT");
+    console.log("USE EFFECT savedata:" +  realDepartureTime + "," + realArrivalTime + "," +  realDuration + "," +  totalDelay + "," +  uniqueIdentifier );
     if (
       realDepartureTime &&
       realArrivalTime &&
@@ -119,6 +121,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       totalDelay &&
       uniqueIdentifier
     ) {
+      console.log("USE EFFECT savedata:" +  realDepartureTime + "," + realArrivalTime + "," +  realDuration + "," +  totalDelay + "," +  uniqueIdentifier );
       saveDBData();
     }
   }, [
