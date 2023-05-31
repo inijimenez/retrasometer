@@ -26,8 +26,8 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [realDepartureTimeDiff, setRealDepartureTimeDiff] = useState(null);
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
   const [realDurationDiff, setRealDurationDiff] = useState(null);
-  const [totalDelay, setTotalDelay] = useState(null);
-  const [uniqueIdentifier, setUniqueIdentifier] = useState('');
+  let [totalDelay, setTotalDelay] = useState(null);
+  let [uniqueIdentifier, setUniqueIdentifier] = useState('');
 
 
   const handleDepartureTimeUpdate = () => {
@@ -79,7 +79,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       line: data.linea,
       trainID: data.cdgoTren,
       origin: searchParams.descEstOrigen,
-      destination: searchParams.descEstOrigen,
+      destination: searchParams.descEstDestino,
       originID: searchParams.cdgoEstOrigen,
       destinationID:searchParams.cdgoEstDestino,
       departureEST: data.horaSalida,
