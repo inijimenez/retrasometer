@@ -46,25 +46,23 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
       setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
+      // Comprobar si ya existe un identificador único en el almacenamiento local
+      const storedIdentifier = localStorage.getItem('uniqueIdentifier');
+      if (storedIdentifier) {
+        setUniqueIdentifier(storedIdentifier);
+      } else {
+        // Generar un nuevo identificador único
+        const newIdentifier = generateUniqueIdentifier();
+        setUniqueIdentifier(newIdentifier);
+        // Almacenar el identificador único en el almacenamiento local
+        localStorage.setItem('uniqueIdentifier', newIdentifier);
+      }
     }
   };
 
-  
 
-  const saveDBData =useCallback(() =>  {
-    // Comprobar si ya existe un identificador único en el almacenamiento local
-    const storedIdentifier = localStorage.getItem('uniqueIdentifier');
-    if (storedIdentifier) {
-      setUniqueIdentifier(storedIdentifier);
-    } else {
-      // Generar un nuevo identificador único
-      const newIdentifier = generateUniqueIdentifier();
-      setUniqueIdentifier(newIdentifier);
-      // Almacenar el identificador único en el almacenamiento local
-      localStorage.setItem('uniqueIdentifier', newIdentifier);
 
-    }
-
+  const saveDBData = useCallback(() => {
     console.log("saveDBData -A");
     console.log("uniqueIdentifier:" + uniqueIdentifier);
 
@@ -112,15 +110,14 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   useEffect(() => {
-    console.log("USE EFFECT");
-    console.log("USE EFFECT savedata:" +  realDepartureTime + "," + realArrivalTime + "," +  realDuration + "," +  totalDelay + "," +  uniqueIdentifier );
+    console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
     if (
       realDepartureTime &&
       realArrivalTime &&
       realDuration &&
-      totalDelay 
+      totalDelay && uniqueIdentifier
     ) {
-      console.log("USE EFFECT savedata:" +  realDepartureTime + "," + realArrivalTime + "," +  realDuration + "," +  totalDelay + "," +  uniqueIdentifier );
+      console.log("USE EFFECT savedata:" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
       saveDBData();
     }
   }, [
