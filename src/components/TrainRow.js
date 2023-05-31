@@ -63,15 +63,10 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   const saveDBData = useCallback(() => {
-    console.log("saveDBData -A");
-    console.log("uniqueIdentifier:" + uniqueIdentifier);
-
     firebase.initializeApp(firebaseConfig);
 
-    console.log("saveDBData -B");
     const db = firebase.firestore();
-    console.log("saveDBData -C");
-    console.log("uniqueIdentifier:" + uniqueIdentifier);
+
     const trainData = {
       date: new Date().toLocaleString(),
       travel: uniqueIdentifier,
@@ -89,9 +84,10 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       arrivalDIFF: realArrivalTimeDiff,
       durationEST: data.duracion,
       durationREAL: realDuration,
-      totalDelay: totalDelay
+      totalDelay: totalDelay,
+      device: navigator.userAgent
     };
-    console.log("saveDBData -D");
+
     db.collection('train_data').add(trainData)
       .then((docRef) => {
         // Mostrar mensaje de éxito en un popup
@@ -117,7 +113,6 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       realDuration &&
       totalDelay && uniqueIdentifier
     ) {
-      console.log("USE EFFECT savedata:" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
       saveDBData();
     }
   }, [
