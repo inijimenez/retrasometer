@@ -118,8 +118,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       realDepartureTime &&
       realArrivalTime &&
       realDuration &&
-      totalDelay &&
-      uniqueIdentifier
+      totalDelay 
     ) {
       console.log("USE EFFECT savedata:" +  realDepartureTime + "," + realArrivalTime + "," +  realDuration + "," +  totalDelay + "," +  uniqueIdentifier );
       saveDBData();
