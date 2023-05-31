@@ -63,6 +63,77 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   const saveDBData = useCallback(() => {
+
+    const userAgent = navigator.userAgent;
+    let deviceName = 'Unknown Device';
+    let deviceVersion = '';
+
+    if (userAgent.match(/Windows NT/)) {
+      deviceName = 'Windows';
+      const versionMatch = userAgent.match(/Windows NT ([\d.]+)/);
+      if (versionMatch) {
+        deviceVersion = versionMatch[1];
+      }
+    } else if (userAgent.match(/Macintosh/)) {
+      deviceName = 'Mac';
+      const versionMatch = userAgent.match(/Mac OS X ([\d_]+)/);
+      if (versionMatch) {
+        deviceVersion = versionMatch[1].replace(/_/g, '.');
+      }
+    } else if (userAgent.match(/iPhone/)) {
+      deviceName = 'iPhone';
+      const versionMatch = userAgent.match(/iPhone OS ([\d_]+)/);
+      if (versionMatch) {
+        deviceVersion = versionMatch[1].replace(/_/g, '.');
+      }
+    } else if (userAgent.match(/iPad/)) {
+      deviceName = 'iPad';
+      const versionMatch = userAgent.match(/iPad OS ([\d_]+)/);
+      if (versionMatch) {
+        deviceVersion = versionMatch[1].replace(/_/g, '.');
+      }
+    } else if (userAgent.match(/Android/)) {
+      deviceName = 'Android';
+      const versionMatch = userAgent.match(/Android ([\d.]+)/);
+      if (versionMatch) {
+        deviceVersion = versionMatch[1];
+      }
+    }
+    let navigatorName = 'Unknown Navigator';
+    let navigatorVersion = '';
+
+    if (userAgent.includes('Firefox')) {
+      navigatorName = 'Firefox';
+      const versionMatch = userAgent.match(/Firefox\/([\d.]+)/);
+      if (versionMatch) {
+        navigatorVersion = versionMatch[1];
+      }
+    } else if (userAgent.includes('Chrome')) {
+      navigatorName = 'Chrome';
+      const versionMatch = userAgent.match(/Chrome\/([\d.]+)/);
+      if (versionMatch) {
+        navigatorVersion = versionMatch[1];
+      }
+    } else if (userAgent.includes('Safari')) {
+      navigatorName = 'Safari';
+      const versionMatch = userAgent.match(/Version\/([\d.]+)/);
+      if (versionMatch) {
+        navigatorVersion = versionMatch[1];
+      }
+    } else if (userAgent.includes('MSIE')) {
+      navigatorName = 'Internet Explorer';
+      const versionMatch = userAgent.match(/MSIE ([\d.]+)/);
+      if (versionMatch) {
+        navigatorVersion = versionMatch[1];
+      }
+    } else if (userAgent.includes('Trident')) {
+      navigatorName = 'Internet Explorer';
+      const versionMatch = userAgent.match(/Trident\/([\d.]+)/);
+      if (versionMatch) {
+        navigatorVersion = versionMatch[1];
+      }
+    }
+
     firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
@@ -85,7 +156,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       durationEST: data.duracion,
       durationREAL: realDuration,
       totalDelay: totalDelay,
-      device: navigator.userAgent
+      device: deviceName + " v" + deviceVersion + " / " + navigatorName + " v" + navigatorVersion
     };
 
     db.collection('train_data').add(trainData)
