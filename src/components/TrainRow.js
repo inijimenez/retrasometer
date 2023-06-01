@@ -150,7 +150,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       departureEST: data.horaSalida,
       departureREAL: realDepartureTime,
       departureDIFF: realDepartureTimeDiff,
-      arrivalEST: data.horaSalida,
+      arrivalEST: data.horaLlegada,
       arrivalREAL: realArrivalTime,
       arrivalDIFF: realArrivalTimeDiff,
       durationEST: data.duracion,
