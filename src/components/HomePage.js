@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Grid, Box } from "@mui/material";
+import { Container, Grid, Box } from "@mui/material";
 import StationSelect from "./StationSelect";
 import TrainList from "./TrainList";
 import localStations from '../stations.json';
