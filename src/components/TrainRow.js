@@ -140,7 +140,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
     const trainData = {
       date: new Date().toLocaleString(),
-      travel: uniqueIdentifier,
+      user: uniqueIdentifier,
       line: data.linea,
       trainID: data.cdgoTren,
       origin: searchParams.descEstOrigen,
