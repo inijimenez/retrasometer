@@ -33,12 +33,6 @@ const HomePage = () => {
   return (
     <ToastProvider>
     <Container>
-      <Typography variant="h3" component="h1" align="center" gutterBottom>
-        Retrasometer
-      </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom>
-        Versión: 1.0.0
-      </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sm={6}>
           <StationSelect
