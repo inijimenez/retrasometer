@@ -29,9 +29,16 @@ const StatsPage = () => {
         const getUserStats = async () => {
 //            firebase.initializeApp(firebaseConfig);
        
-            const currentDate = new Date();
-            const startOfWeek = new Date(currentDate);
-            startOfWeek.setDate(startOfWeek.getDate() - currentDate.getDay());
+            const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+          
+            const startOfWeek = new Date();
+            startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+
+            const endOfWeek = new Date();
+            endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
+
+
       
             const todayStats = await getStatsForDay(user, currentDate);
             const weekStats = await getStatsForWeek(user, startOfWeek, currentDate);
@@ -49,11 +56,13 @@ const StatsPage = () => {
     }, [user]);
 
     const getStatsForDay = async (user, date) => {
+        const fechaActual = new Date();
+        fechaActual.setHours(0, 0, 0, 0);
+
         const querySnapshot = await firestore
           .collection('train_data')
           .where('user', '==', user)
-          .where('date', '>=', new Date(date.getFullYear(), date.getMonth(), date.getDate()))
-          .where('date', '<', new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1))
+          .where('date', '>=', fechaActual)
           .get();
     
         let totalDelay = 0;
