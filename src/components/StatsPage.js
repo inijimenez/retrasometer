@@ -46,7 +46,7 @@ const StatsPage = () => {
         };
 
         getUserStats();
-    }, []);
+    }, [user]);
 
     const getStatsForDay = async (user, date) => {
         const querySnapshot = await firestore

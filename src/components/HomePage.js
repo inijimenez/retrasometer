@@ -54,7 +54,7 @@ const HomePage = () => {
       localStorage.setItem("stations", JSON.stringify(miLocalStation.localStations));
       localStorage.setItem("trains", JSON.stringify(miLocalTrain.localTrains));
     }
-  }, []);
+  }, [setUniqueIdentifier]);
   return (
     <ToastProvider>
     <Container>
