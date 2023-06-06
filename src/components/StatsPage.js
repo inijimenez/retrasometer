@@ -108,10 +108,10 @@ const StatsPage = () => {
 
     return (
         <div>
-        <h1>Estadísticas</h1>
+        <h1>Estadísticas {user}</h1>
         <p>Total de retraso acumulado para el día actual: {totalDelayToday}</p>
         <p>Total de retraso acumulado para la semana actual: {totalDelayWeek}</p>
-        <h2>Retraso acumulado por línea para la semana actual</h2>
+        <p>Retraso acumulado por línea para la semana actual:</p>
         <ul>
           {Object.entries(totalDelayByLine).map(([line, totalDelay]) => (
             <li key={line}>
@@ -119,7 +119,7 @@ const StatsPage = () => {
             </li>
           ))}
         </ul>
-        <h2>Promedio de retraso por línea para la semana actual</h2>
+        <p>Promedio de retraso por línea para la semana actual:</p>
         <ul>
           {Object.entries(averageDelayByLine).map(([line, averageDelay]) => (
             <li key={line}>
