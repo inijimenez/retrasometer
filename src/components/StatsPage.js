@@ -11,134 +11,125 @@ const firestore = firebase.firestore();
 const StatsPage = () => {
     const [totalDelayToday, setTotalDelayToday] = useState(0);
     const [totalDelayWeek, setTotalDelayWeek] = useState(0);
-    const [totalDelayByLine, setTotalDelayByLine] = useState([]);
-    const [averageDelayByLine, setAverageDelayByLine] = useState([]);
+    const [totalDelayByLine, setTotalDelayByLine] = useState({});
+    const [averageDelayByLine, setAverageDelayByLine] = useState({});
+
     let [user] = useState('');
 
     user = localStorage.getItem('uniqueIdentifier');
 
     useEffect(() => {
-        // Lógica para obtener los datos de Firestore y actualizar los estados correspondientes.
-        // Puedes utilizar la librería de Firebase para realizar consultas a Firestore.
-
-        // Aquí debes realizar la consulta a Firestornpmpe para obtener los datos necesarios para el usuario "1685468654461-1981".
-        // Utiliza los datos que proporcionaste como ejemplo y realiza la consulta correspondiente.
-
-        // Ejemplo de cómo realizar la consulta a Firestore utilizando Firebase.
-        // Esta consulta asume que tienes configurada la conexión con Firebase en tu proyecto.
-        const getUserStats = async () => {
-//            firebase.initializeApp(firebaseConfig);
-       
-            const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-          
-            const startOfWeek = new Date();
-            startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-
-            const endOfWeek = new Date();
-            endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
-
-
-      
-            const todayStats = await getStatsForDay(user, currentDate);
-            const weekStats = await getStatsForWeek(user, startOfWeek, currentDate);
-            const lineStats = await getStatsByLine(user, startOfWeek, currentDate);
-      
-            setTotalDelayToday(todayStats.totalDelay);
-            setTotalDelayWeek(weekStats.totalDelay);
-            setTotalDelayByLine(lineStats.totalDelayByLine);
-            setAverageDelayByLine(lineStats.averageDelayByLine);
-
-            
-        };
-
-        getUserStats();
-    }, [user]);
-
-    const getStatsForDay = async (user, date) => {
-        const fechaActual = new Date();
-        fechaActual.setHours(0, 0, 0, 0);
-
-        const querySnapshot = await firestore
-          .collection('train_data')
+        // Obtener la referencia a la colección "estadisticas"
+        const statisticsRef = firebase.firestore().collection('train_data');
+    
+        // Obtener las estadísticas para el usuario y la semana actual
+        const user = '1685468654461-1981';
+        const currentWeekStart = getStartOfWeek(new Date());
+        const currentWeekEnd = getEndOfWeek(new Date());
+    
+        const query = statisticsRef
           .where('user', '==', user)
-          .where('date', '>=', fechaActual)
-          .get();
+          .where('date', '>=', currentWeekStart)
+          .where('date', '<=', currentWeekEnd);
     
-        let totalDelay = 0;
-        querySnapshot.forEach((doc) => {
-          totalDelay += doc.data().totalDelay;
+        // Escuchar los cambios en los datos de Firestore
+        const unsubscribe = query.onSnapshot((snapshot) => {
+          let totalDelayToday = 0;
+          let totalDelayWeek = 0;
+          const totalDelayByLine = {};
+          const delayCountByLine = {};
+          const averageDelayByLine = {};
+    
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const totalDelay = data.totalDelay || 0;
+            const line = data.line;
+    
+            // Actualizar el totalDelay acumulado para el día actual
+            const currentDate = new Date();
+            if (isSameDay(currentDate, data.date.toDate())) {
+              totalDelayToday += totalDelay;
+            }
+    
+            // Acumular el totalDelay por línea y contar el número de registros por línea
+            if (!totalDelayByLine[line]) {
+              totalDelayByLine[line] = totalDelay;
+              delayCountByLine[line] = 1;
+            } else {
+              totalDelayByLine[line] += totalDelay;
+              delayCountByLine[line]++;
+            }
+    
+            // Actualizar el totalDelay acumulado para la semana actual
+            totalDelayWeek += totalDelay;
+          });
+    
+          // Calcular el totalDelay medio por línea
+          Object.keys(totalDelayByLine).forEach((line) => {
+            const totalDelay = totalDelayByLine[line];
+            const delayCount = delayCountByLine[line];
+            const averageDelay = totalDelay / delayCount;
+            averageDelayByLine[line] = averageDelay;
+          });
+    
+          setTotalDelayToday(totalDelayToday);
+          setTotalDelayWeek(totalDelayWeek);
+          setTotalDelayByLine(totalDelayByLine);
+          setAverageDelayByLine(averageDelayByLine);
         });
     
-        return { totalDelay };
-      };
-    
-      const getStatsForWeek = async (user, startDate, endDate) => {
-        const querySnapshot = await firestore
-          .collection('train_data')
-          .where('user', '==', user)
-          .where('date', '>=', startDate)
-          .where('date', '<', new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1))
-          .get();
-    
-        let totalDelay = 0;
-        querySnapshot.forEach((doc) => {
-          totalDelay += doc.data().totalDelay;
-        });
-    
-        return { totalDelay };
-      };
-    
-      const getStatsByLine = async (user, startDate, endDate) => {
-        const querySnapshot = await firestore
-          .collection('train_data')
-          .where('user', '==', user)
-          .where('date', '>=', startDate)
-          .where('date', '<', new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1))
-          .get();
-    
-        const totalDelayByLine = {};
-        const averageDelayByLine = {};
-    
-        querySnapshot.forEach((doc) => {
-          const line = doc.data().line;
-          const totalDelay = doc.data().totalDelay;
-    
-          totalDelayByLine[line] = (totalDelayByLine[line] || 0) + totalDelay;
-          averageDelayByLine[line] = (averageDelayByLine[line] || 0) + totalDelay;
-        });
-    
-        // Calcula el promedio dividiendo el total de retraso por el número de registros por línea
-        Object.keys(averageDelayByLine).forEach((line) => {
-          averageDelayByLine[line] /= querySnapshot.size;
-        });
-    
-        return { totalDelayByLine, averageDelayByLine };
-      };
+        // Limpiar el listener cuando el componente se desmonte
+        return () => unsubscribe();
+      }, []);
 
+ // Función para obtener el inicio de la semana a partir de una fecha
+ const getStartOfWeek = (date) => {
+    const startOfWeek = new Date(date);
+    startOfWeek.setHours(0, 0, 0, 0);
+    startOfWeek.setDate(date.getDate() - date.getDay());
+    return startOfWeek;
+  };
+
+  // Función para obtener el fin de la semana a partir de una fecha
+  const getEndOfWeek = (date) => {
+    const endOfWeek = new Date(date);
+    endOfWeek.setHours(23, 59, 59, 999);
+    endOfWeek.setDate(date.getDate() + (6 - date.getDay()));
+    return endOfWeek;
+  };
+
+  // Función para comprobar si dos fechas son el mismo día
+  const isSameDay = (date1, date2) => {
     return (
-        <div>
-        <h1>Estadísticas '{user}'</h1>
-        <p>Total de retraso acumulado para el día actual: {totalDelayToday}</p>
-        <p>Total de retraso acumulado para la semana actual: {totalDelayWeek}</p>
-        <p>Retraso acumulado por línea para la semana actual:</p>
-        <ul>
-          {Object.entries(totalDelayByLine).map(([line, totalDelay]) => (
-            <li key={line}>
-              Línea {line}: {totalDelay}
-            </li>
-          ))}
-        </ul>
-        <p>Promedio de retraso por línea para la semana actual:</p>
-        <ul>
-          {Object.entries(averageDelayByLine).map(([line, averageDelay]) => (
-            <li key={line}>
-              Línea {line}: {averageDelay}
-            </li>
-          ))}
-        </ul>
-      </div>
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
     );
+  };
+
+  return (
+    <div>
+      <h1>Estadísticas '{user}'</h1>
+      <p>Total de retraso acumulado para el día actual: {totalDelayToday}</p>
+      <p>Total de retraso acumulado para la semana actual: {totalDelayWeek}</p>
+      <h2>Retraso acumulado por línea</h2>
+      <ul>
+        {Object.keys(totalDelayByLine).map((line) => (
+          <li key={line}>
+            Línea {line}: {totalDelayByLine[line]} minutos
+          </li>
+        ))}
+      </ul>
+      <h2>Retraso medio por línea</h2>
+      <ul>
+        {Object.keys(averageDelayByLine).map((line) => (
+          <li key={line}>
+            Línea {line}: {averageDelayByLine[line]} minutos
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default StatsPage;
