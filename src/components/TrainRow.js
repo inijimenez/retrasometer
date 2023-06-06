@@ -8,14 +8,7 @@ import { useToasts } from 'react-toast-notifications';
 
 
 
-// Función para generar un identificador único
-const generateUniqueIdentifier = () => {
-  // Puedes utilizar alguna lógica personalizada aquí para generar el identificador único
-  // Por ejemplo, puedes combinar la fecha actual con un valor aleatorio
-  const timestamp = new Date().getTime();
-  const randomValue = Math.floor(Math.random() * 10000);
-  return `${timestamp}-${randomValue}`;
-};
+
 
 const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const { addToast } = useToasts();
@@ -27,7 +20,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
   const [realDurationDiff, setRealDurationDiff] = useState(null);
   const [totalDelay, setTotalDelay] = useState(null);
-  const [uniqueIdentifier, setUniqueIdentifier] = useState('');
+  let  [uniqueIdentifier] = useState('');
 
 
   const handleDepartureTimeUpdate = () => {
@@ -47,16 +40,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       setRealDurationDiff(realDurationA - estDurationA)
       setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
       // Comprobar si ya existe un identificador único en el almacenamiento local
-      const storedIdentifier = localStorage.getItem('uniqueIdentifier');
-      if (storedIdentifier) {
-        setUniqueIdentifier(storedIdentifier);
-      } else {
-        // Generar un nuevo identificador único
-        const newIdentifier = generateUniqueIdentifier();
-        setUniqueIdentifier(newIdentifier);
-        // Almacenar el identificador único en el almacenamiento local
-        localStorage.setItem('uniqueIdentifier', newIdentifier);
-      }
+      uniqueIdentifier = localStorage.getItem('uniqueIdentifier');
     }
   };
 

@@ -13,7 +13,9 @@ const StatsPage = () => {
     const [totalDelayWeek, setTotalDelayWeek] = useState(0);
     const [totalDelayByLine, setTotalDelayByLine] = useState([]);
     const [averageDelayByLine, setAverageDelayByLine] = useState([]);
+    let [user] = useState('');
 
+    user = localStorage.getItem('uniqueIdentifier');
 
     useEffect(() => {
         // Lógica para obtener los datos de Firestore y actualizar los estados correspondientes.
@@ -26,8 +28,7 @@ const StatsPage = () => {
         // Esta consulta asume que tienes configurada la conexión con Firebase en tu proyecto.
         const getUserStats = async () => {
 //            firebase.initializeApp(firebaseConfig);
-
-            const user = '1685468654461-1981';
+       
             const currentDate = new Date();
             const startOfWeek = new Date(currentDate);
             startOfWeek.setDate(startOfWeek.getDate() - currentDate.getDay());
@@ -108,7 +109,7 @@ const StatsPage = () => {
 
     return (
         <div>
-        <h1>Estadísticas {user}</h1>
+        <h1>Estadísticas '{user}'</h1>
         <p>Total de retraso acumulado para el día actual: {totalDelayToday}</p>
         <p>Total de retraso acumulado para la semana actual: {totalDelayWeek}</p>
         <p>Retraso acumulado por línea para la semana actual:</p>
