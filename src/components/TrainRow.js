@@ -20,7 +20,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [realArrivalTimeDiff, setRealArrivalTimeDiff] = useState(null);
   const [realDurationDiff, setRealDurationDiff] = useState(null);
   const [totalDelay, setTotalDelay] = useState(null);
-  let  [uniqueIdentifier] = useState('');
+  const  [uniqueIdentifier, setUniqueIdentifier] = useState('');
 
 
   const handleDepartureTimeUpdate = () => {
@@ -39,8 +39,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
       setRealDuration(realDurationA)
       setRealDurationDiff(realDurationA - estDurationA)
       setTotalDelay(getDifferenceInMinutes(data.horaLlegada, realTime));
-      // Comprobar si ya existe un identificador único en el almacenamiento local
-      uniqueIdentifier = localStorage.getItem('uniqueIdentifier');
+
     }
   };
 
@@ -161,6 +160,9 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   useEffect(() => {
+    // Comprobar si ya existe un identificador único en el almacenamiento local
+    setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'));
+
     console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
     if (
       realDepartureTime &&
