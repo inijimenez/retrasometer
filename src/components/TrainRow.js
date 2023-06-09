@@ -8,8 +8,6 @@ import { useToasts } from 'react-toast-notifications';
 
 
 
-
-
 const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const { addToast } = useToasts();
   const [realDepartureTime, setRealDepartureTime] = useState(null);
@@ -21,6 +19,12 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [realDurationDiff, setRealDurationDiff] = useState(null);
   const [totalDelay, setTotalDelay] = useState(null);
   const  [uniqueIdentifier, setUniqueIdentifier] = useState('');
+
+  useEffect(() => {
+    console.log("UserEffect A:" + localStorage.getItem('uniqueIdentifier'))
+   setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'))
+  }, []); // Empty array ensures this runs once on mount and not on updates
+
 
 
   const handleDepartureTimeUpdate = () => {
@@ -156,16 +160,11 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -E");
 
 
-  }, [uniqueIdentifier, data.linea, data.cdgoTren, data.horaSalida, data.horaLlegada, data.duracion, searchParams.descEstOrigen, searchParams.descEstDestino, searchParams.cdgoEstOrigen, searchParams.cdgoEstDestino, realDepartureTime, realDepartureTimeDiff, realArrivalTime, realArrivalTimeDiff, realDuration, totalDelay, addToast]);
+  }, [data.linea, data.cdgoTren, data.horaSalida, data.horaLlegada, data.duracion, searchParams.descEstOrigen, searchParams.descEstDestino, searchParams.cdgoEstOrigen, searchParams.cdgoEstDestino, realDepartureTime, realDepartureTimeDiff, realArrivalTime, realArrivalTimeDiff, realDuration, totalDelay, addToast]);
 
 
-  useEffect(() => {
-    // Comprobar si ya existe un identificador único en el almacenamiento local
-    uniqueIdentifier =localStorage.getItem('uniqueIdentifier');
-    console.log("UseEFECT uniqueIdentifier:" + uniqueIdentifier);
-    
-
-    console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
+  useEffect(() => {    
+    console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + localStorage.getItem('uniqueIdentifier'));
     if (
       realDepartureTime &&
       realArrivalTime &&
@@ -174,14 +173,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     ) {
       saveDBData();
     }
-  }, [
-    realDepartureTime,
-    realArrivalTime,
-    realDuration,
-    totalDelay,
-    uniqueIdentifier,
-    saveDBData,
-  ]);
+  }, [realDepartureTime, realArrivalTime, realDuration, totalDelay, saveDBData, uniqueIdentifier]);
 
   if (!visible) {
     return null;
