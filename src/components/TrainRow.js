@@ -20,10 +20,6 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   const [totalDelay, setTotalDelay] = useState(null);
   const  [uniqueIdentifier, setUniqueIdentifier] = useState('');
 
-  useEffect(() => {
-    console.log("UserEffect A:" + localStorage.getItem('uniqueIdentifier'))
-   setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'))
-  }, [uniqueIdentifier]); // Empty array ensures this runs once on mount and not on updates
 
 
 
@@ -164,6 +160,10 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
 
   useEffect(() => {    
+
+    console.log("UserEffect A:" + localStorage.getItem('uniqueIdentifier'))
+    setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'))
+ 
     console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + localStorage.getItem('uniqueIdentifier'));
     if (
       realDepartureTime &&
