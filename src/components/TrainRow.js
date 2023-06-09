@@ -23,7 +23,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
   useEffect(() => {
     console.log("UserEffect A:" + localStorage.getItem('uniqueIdentifier'))
    setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'))
-  }, []); // Empty array ensures this runs once on mount and not on updates
+  }, [uniqueIdentifier]); // Empty array ensures this runs once on mount and not on updates
 
 
 
