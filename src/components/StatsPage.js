@@ -5,7 +5,6 @@ import firebaseConfig from '../firebaseConfig'; // importa tu archivo de configu
 
 
 firebase.initializeApp(firebaseConfig);
-const firestore = firebase.firestore();
 
 
 const StatsPage = () => {
