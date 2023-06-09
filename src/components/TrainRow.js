@@ -156,7 +156,7 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
     console.log("saveDBData -E");
 
 
-  }, [data.linea, data.cdgoTren, data.horaSalida, data.horaLlegada, data.duracion, searchParams.descEstOrigen, searchParams.descEstDestino, searchParams.cdgoEstOrigen, searchParams.cdgoEstDestino, realDepartureTime, realDepartureTimeDiff, realArrivalTime, realArrivalTimeDiff, realDuration, totalDelay, addToast]);
+  }, [uniqueIdentifier, data.linea, data.cdgoTren, data.horaSalida, data.horaLlegada, data.duracion, searchParams.descEstOrigen, searchParams.descEstDestino, searchParams.cdgoEstOrigen, searchParams.cdgoEstDestino, realDepartureTime, realDepartureTimeDiff, realArrivalTime, realArrivalTimeDiff, realDuration, totalDelay, addToast]);
 
 
   useEffect(() => {    
