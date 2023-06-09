@@ -161,7 +161,9 @@ const TrainRow = ({ data, hiddenColumns, visible, onClick, searchParams }) => {
 
   useEffect(() => {
     // Comprobar si ya existe un identificador único en el almacenamiento local
-    setUniqueIdentifier(localStorage.getItem('uniqueIdentifier'));
+    uniqueIdentifier =localStorage.getItem('uniqueIdentifier');
+    console.log("UseEFECT uniqueIdentifier:" + uniqueIdentifier);
+    
 
     console.log("USE EFFECT :" + realDepartureTime + "," + realArrivalTime + "," + realDuration + "," + totalDelay + "," + uniqueIdentifier);
     if (
